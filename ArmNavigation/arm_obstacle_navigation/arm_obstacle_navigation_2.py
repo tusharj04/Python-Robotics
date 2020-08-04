@@ -31,7 +31,7 @@ def main():
     arm = NLinkArm(link_length, initial_link_angle)
     # (x, y) co-ordinates in the joint space [cell]
     start = (10, 50)
-    goal = (58, 56)
+    goal = (99, 99)
     grid = get_occupancy_grid(arm, obstacles)
     route = astar_torus(grid, start, goal)
     if len(route) >= 0:
@@ -105,7 +105,7 @@ def get_occupancy_grid(arm, obstacles):
     Args:
         arm: An instance of NLinkArm
         obstacles: A list of obstacles, with each obstacle defined as a list
-                   of xy coordinates and a radius. 
+                   of xy coordinates and a radius.
 
     Returns:
         Occupancy grid in joint space
