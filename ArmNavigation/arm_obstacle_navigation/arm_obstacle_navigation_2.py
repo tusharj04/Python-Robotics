@@ -9,12 +9,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import from_levels_and_colors
 import sys
+import random
 
 plt.ion()
 
 # Simulation parameters
 M = 100
-obstacles = [[1.75, 0.75, 0.6], [0.55, 1.5, 0.5], [0, -1, 0.7]]
+obstacles = [ ]
+randomTotal = int(random.random()*5)
+for x in range(randomTotal):
+    random1 = random.uniform(-2, 2)
+    random2 =random.uniform(-2, 2)
+    random3 = random.uniform(.4,.7)
+    obstacles.append([random1, random2,random3 ])
+
+
+
 
 
 def press(event):
@@ -30,8 +40,12 @@ def main():
     initial_link_angle = [0, 0]
     arm = NLinkArm(link_length, initial_link_angle)
     # (x, y) co-ordinates in the joint space [cell]
-    start = (10, 50)
-    goal = (99, 99)
+    startx =int( random.random()*99)
+    starty =int( random.random()*99)
+    goalx =int( random.random()*99)
+    goaly =int( random.random()*99)
+    start = (startx,starty)
+    goal = (goalx, goaly)
     grid = get_occupancy_grid(arm, obstacles)
     route = astar_torus(grid, start, goal)
     if len(route) >= 0:
