@@ -46,7 +46,11 @@ def main():
     goaly =int( random.random()*99)
     start = (startx,starty)
     goal = (goalx, goaly)
+    ##np.zeros()
     grid = get_occupancy_grid(arm, obstacles)
+    ##grid2 = []
+    ##grid2.append([grid])
+    ##np.savetxt('cspace.dat', grid2)
     route = astar_torus(grid, start, goal)
     if len(route) >= 0:
         animate(grid, arm, route)
@@ -139,12 +143,13 @@ def get_occupancy_grid(arm, obstacles):
                         break
                 if collision_detected:
                     break
-            grid[i][j] = int(collision_detected)
     return np.array(grid)
+
 
 
 def astar_torus(grid, start_node, goal_node):
     """
+
     Finds a path between an initial and goal joint configuration using
     the A* Algorithm on a tororiadal grid.
 
@@ -213,7 +218,7 @@ def astar_torus(grid, start_node, goal_node):
             plt.imshow(grid, cmap=cmap, norm=norm, interpolation=None)
             plt.show()
             plt.pause(1e-2)
-
+            print(route)
     return route
 
 
@@ -308,6 +313,15 @@ class NLinkArm(object):
         myplt.draw()
         # myplt.pause(1e-5)
 
+grid2 = []
 
-if __name__ == '__main__':
-    main()
+for x in range(5):
+    link_length = [0.5, 1.5]
+    initial_link_angle = [0, 0]
+    arm = NLinkArm(link_length, initial_link_angle)
+    grid = get_occupancy_grid(arm, obstacles)
+    ##grid2 = []
+    grid2.append([grid])
+    np.savetxt('cspace.dat', grid2)
+    if __name__ == '__main__':
+        main()
