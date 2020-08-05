@@ -316,12 +316,17 @@ class NLinkArm(object):
 grid2 = []
 
 for x in range(5):
-    link_length = [0.5, 1.5]
-    initial_link_angle = [0, 0]
-    arm = NLinkArm(link_length, initial_link_angle)
-    grid = get_occupancy_grid(arm, obstacles)
-    ##grid2 = []
-    grid2.append([grid])
-    np.savetxt('cspace.dat', grid2)
+    obstacles = [ ]
+    randomTotal = int(random.random()*5)
+    for x in range(randomTotal):
+        random1 = random.uniform(-2, 2)
+        random2 =random.uniform(-2, 2)
+        random3 = random.uniform(.4,.7)
+        obstacles.append([random1, random2,random3 ])
     if __name__ == '__main__':
-        main()
+         obj = main()
+    arm =obj.NLinkArm(link_length, initial_link_angle) #see if this works
+    grid = obj.get_occupancy_grid(arm, obstacles)
+    ##grid2 = []
+    grid2.append(grid)
+np.savetxt('cspace.dat', grid2)
