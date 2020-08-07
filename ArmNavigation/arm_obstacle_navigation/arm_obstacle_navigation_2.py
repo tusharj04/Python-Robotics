@@ -215,7 +215,7 @@ def astar_torus(grid, start_node, goal_node):
             plt.imshow(grid, cmap=cmap, norm=norm, interpolation=None)
             plt.show()
             plt.pause(1e-2)
-            print(route)
+
     return route
 
 
@@ -312,12 +312,12 @@ class NLinkArm(object):
 
 grid2 = []
 np.savetxt("cspace.dat", grid2)
-
-for x in range(5):
+np.set_printoptions(threshold=sys.maxsize)
+for x in range(2):
     # Simulation parameters
     M = 100
     obstacles = []
-    randomTotal = int(random.random()*5)
+    randomTotal = int(random.random()*4 +1)
     for x in range(randomTotal):
         random1 = random.uniform(-2, 2)
         random2 =random.uniform(-2, 2)
@@ -328,8 +328,11 @@ for x in range(5):
     arm = NLinkArm(link_length, initial_link_angle)
     grid = get_occupancy_grid(arm, obstacles)
     f=open("cspace.dat", "a+")
-    f.write("hello") ##supposed to put the grid here, hello was just a test
+    s = np.array_str(grid)
+    print('test')
+    f.write(s) ##supposed to put the grid here, hello was just a test
     ##grid2.append([grid])
     if __name__ == '__main__':
         main()
+    f.write("test \n")
 ##np.savetxt('cspace.dat', grid2)
