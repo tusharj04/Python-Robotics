@@ -23,6 +23,7 @@ plt.ion()
     #random3 = random.uniform(.4,.7)
     #obstacles.append([random1, random2, random3])
 
+
 def press(event):
     """Exit from the simulation."""
     if event.key == 'q' or event.key == 'Q':
@@ -30,20 +31,30 @@ def press(event):
         sys.exit(0)
 
 
-def main():
+def main(number):
     # Arm geometry in the working space
     link_length = [0.5, 1.5]
     initial_link_angle = [0, 0]
     arm = NLinkArm(link_length, initial_link_angle)
     # (x, y) co-ordinates in the joint space [cell]
-    startx =int( random.random()*99)
-    starty =int( random.random()*99)
-    goalx =int( random.random()*99)
-    goaly =int( random.random()*99)
+    startx = int(random.random()*99)
+    starty = int(random.random()*99)
+    goalx = int(random.random()*99)
+    goaly = int(random.random()*99)
     start = (startx,starty)
     goal = (goalx, goaly)
-    ##np.zeros()
-    grid = get_occupancy_grid(arm, obstacles)
+    s = (100,100)
+    global startgrid
+    startgrid = np.zeros(s)
+    startgrid[startx][starty] = 1;
+    global goalgrid
+    goalgrid = np.zeros(s)
+    goalgrid[goalx][goaly] = 1;
+    plt.imshow(startgrid)
+    #plt.savefig('startgrid{:04d}.png'.format(number))
+    plt.savefig('startgrid{:04d}.png'.format(number))
+    plt.imshow(goalgrid)
+    plt.savefig('goalgrid{:04d}.png'.format(number))
     ##grid2 = []
     ##grid2.append([grid])
     ##np.savetxt('cspace.dat', grid2)
@@ -200,6 +211,8 @@ def astar_torus(grid, start_node, goal_node):
     if np.isinf(explored_heuristic_map[goal_node]):
         route = []
         print("No route found.")
+        global routestatus
+        routestatus = 0;
     else:
         route = [goal_node]
         while parent_map[route[0][0]][route[0][1]] != ():
@@ -255,7 +268,6 @@ def calc_heuristic_map(M, goal_node):
                                       j + 1 + heuristic_map[i, M - 1],
                                       M - j + heuristic_map[i, 0]
                                       )
-
     return heuristic_map
 
 
@@ -310,10 +322,9 @@ class NLinkArm(object):
         myplt.draw()
         # myplt.pause(1e-5)
 
-grid2 = []
-np.savetxt("cspace.dat", grid2)
+
 np.set_printoptions(threshold=sys.maxsize)
-for x in range(2):
+for z in range(3):
     # Simulation parameters
     M = 100
     obstacles = []
@@ -329,10 +340,12 @@ for x in range(2):
     grid = get_occupancy_grid(arm, obstacles)
     f=open("cspace.dat", "a+")
     s = np.array_str(grid)
-    print('test')
-    f.write(s) ##supposed to put the grid here, hello was just a test
-    ##grid2.append([grid])
+    res = str(s)[1:-1]
+    f.write(res)
+    grid = get_occupancy_grid(arm, obstacles)
     if __name__ == '__main__':
-        main()
+        main(z)
     f.write("test \n")
+    if routestatus == 0:
+        plt.show()
 ##np.savetxt('cspace.dat', grid2)
