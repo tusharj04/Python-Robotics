@@ -47,20 +47,31 @@ def main(number):
     global startgrid
     startgrid = np.zeros(s)
     startgrid[startx][starty] = 1;
+    plt.imshow(startgrid)
+    plt.savefig('startgrid{:04d}.png'.format(number))
+    plt.clf()
+    #goalgrid
     global goalgrid
     goalgrid = np.zeros(s)
     goalgrid[goalx][goaly] = 1;
-    plt.imshow(startgrid)
     #plt.savefig('startgrid{:04d}.png'.format(number))
-    plt.savefig('startgrid{:04d}.png'.format(number))
     plt.imshow(goalgrid)
     plt.savefig('goalgrid{:04d}.png'.format(number))
+    plt.clf()
     ##grid2 = []
     ##grid2.append([grid])
     ##np.savetxt('cspace.dat', grid2)
     route = astar_torus(grid, start, goal)
-    if len(route) >= 0:
-        animate(grid, arm, route)
+    global routegrid
+    routegrid = np.zeros(s)
+    for i in range(1, len(route)):
+        routegrid[route[i]] = 6
+    plt.imshow(routegrid)
+    plt.savefig('routegrid{:04d}.png'.format(number))
+    plt.clf()
+#    if len(route) >= 0:
+#        animate(grid, arm, route)
+#previous 2 lines commented out to fix goalgrid and startgrid
 
 
 def animate(grid, arm, route):
@@ -343,9 +354,11 @@ for z in range(3):
     res = str(s)[1:-1]
     f.write(res)
     grid = get_occupancy_grid(arm, obstacles)
+    plt.imshow(grid)
+
     if __name__ == '__main__':
         main(z)
     f.write("test \n")
-    if routestatus == 0:
-        plt.show()
+    #if routestatus == 0:
+    #    plt.show()
 ##np.savetxt('cspace.dat', grid2)
