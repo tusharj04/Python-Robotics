@@ -1,6 +1,5 @@
 """
 Obstacle navigation using A* on a toroidal grid
-
 Author: Daniel Ingram (daniel-s-ingram)
         Tullio Facchinetti (tullio.facchinetti@unipv.it)
 """
@@ -9,19 +8,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import from_levels_and_colors
 import sys
-import random
 
 plt.ion()
 
 # Simulation parameters
-#M = 100
-#obstacles = []
-#randomTotal = int(random.random()*5)
-#for x in range(randomTotal):
-    #random1 = random.uniform(-2, 2)
-    #random2 = random.uniform(-2, 2)
-    #random3 = random.uniform(.4,.7)
-    #obstacles.append([random1, random2, random3])
+M = 100
+obstacles = [[1.75, 0.75, 0.6], [0.55, 1.5, 0.5], [0, -1, 0.7]]
 
 
 def press(event):
@@ -31,71 +23,18 @@ def press(event):
         sys.exit(0)
 
 
-def main(number,obs):
+def main():
     # Arm geometry in the working space
     link_length = [0.5, 1.5]
     initial_link_angle = [0, 0]
     arm = NLinkArm(link_length, initial_link_angle)
-    numlinks = len(link_length)
     # (x, y) co-ordinates in the joint space [cell]
-    startx = int(random.random()*99)
-    starty = int(random.random()*99)
-    goalx = int(random.random()*99)
-    goaly = int(random.random()*99)
-    start = (startx,starty)
-    goal = (goalx, goaly)
-    s = (100,100)
-    ##Whoever works next this is the code to plot the start one idrk
-    for i in range(self.n_links + 1):
-        if i is not self.n_links:
-        myplt.plot(self.points[i][0], self.points[i][1], 'k.')
-    global startgrid
-    startgrid = np.zeros(s)
-    startgrid[startx][starty] = 1;
-    plt.imshow(startgrid)
-    plt.savefig('startgrid{:04d}.png'.format(number))
-    plt.clf()
-    #goalgrid
-    global goalgrid
-    goalgrid = np.zeros(s)
-    goalgrid[goalx][goaly] = 1;
-    #plt.savefig('startgrid{:04d}.png'.format(number))
-    plt.imshow(goalgrid)
-    plt.savefig('goalgrid{:04d}.png'.format(number))
-    plt.clf()
+    start = (10, 50)
+    goal = (58, 56)
     grid = get_occupancy_grid(arm, obstacles)
-    plt.imshow(grid)
-    plt.savefig('cspacegrid{:04d}.png'.format(number))
-    plt.clf()
-    ##grid2 = []
-    ##grid2.append([grid])
-    ##np.savetxt('cspace.dat', grid2)
     route = astar_torus(grid, start, goal)
-    global routegrid
-    routegrid = np.zeros(s)
-    for i in range(1, len(route)):
-        routegrid[route[i]] = 6
-    plt.imshow(routegrid)
-    plt.savefig('routegrid{:04d}.png'.format(number))
-    plt.clf()
-    for obstacle in obs:
-        circle = plt.Circle(
-            (obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
-        print("plotted")
-        plt.gca().add_patch(circle)
-
-    limit = sum(link_length)
-    plt.xlim([-limit, limit])
-    plt.ylim([-limit, limit])
-    plt.draw()
-    plt.show()
-    plt.savefig('workspacegrid{:04d}.png'.format(number))
-    plt.clf()
-
-    plt.pause(1e-5)
-    #if len(route) >= 0:
-        #animate(grid, arm, route)
-#previous 2 lines commented out to fix goalgrid and startgrid
+    if len(route) >= 0:
+        animate(grid, arm, route)
 
 
 def animate(grid, arm, route):
@@ -120,21 +59,6 @@ def animate(grid, arm, route):
         # Uncomment here to save the sequence of frames
         # plt.savefig('frame{:04d}.png'.format(i))
         plt.pause(0.1)
-def animate2(obst):
-
-    fig, axs = plt.subplots(1, 2)
-    fig.canvas.mpl_connect('key_press_event', press)
-    colors = ['white', 'black', 'red', 'pink', 'yellow', 'green', 'orange']
-    levels = [0, 1, 2, 3, 4, 5, 6, 7]
-    cmap, norm = from_levels_and_colors(levels, colors)
-    plt.cla()
-    plt.subplot(1, 2, 2)
-    arm.plot_arm(plt, obstacles=obst)
-    plt.xlim(-2.0, 2.0)
-    plt.ylim(-3.0, 3.0)
-    plt.show()
-        # Uncomment here to save the sequence of frames
-        # plt.savefig('frame{:04d}.png'.format(i))
 
 
 def detect_collision(line_seg, circle):
@@ -146,7 +70,6 @@ def detect_collision(line_seg, circle):
         line_seg: List of coordinates of line segment endpoints e.g. [[1, 1], [2, 2]]
         circle: List of circle coordinates and radius e.g. [0, 0, 0.5] is a circle centered
                 at the origin with radius 0.5
-
     Returns:
         True if the line segment is in contact with the circle
         False otherwise
@@ -176,12 +99,10 @@ def get_occupancy_grid(arm, obstacles):
     and determines whether a given coordinate in joint space
     would result in a collision between a robot arm and obstacles
     in its environment.
-
     Args:
         arm: An instance of NLinkArm
         obstacles: A list of obstacles, with each obstacle defined as a list
                    of xy coordinates and a radius.
-
     Returns:
         Occupancy grid in joint space
     """
@@ -204,18 +125,14 @@ def get_occupancy_grid(arm, obstacles):
     return np.array(grid)
 
 
-
 def astar_torus(grid, start_node, goal_node):
     """
-
     Finds a path between an initial and goal joint configuration using
     the A* Algorithm on a tororiadal grid.
-
     Args:
         grid: An occupancy grid (ndarray)
         start_node: Initial joint configuation (tuple)
         goal_node: Goal joint configuration (tuple)
-
     Returns:
         Obstacle-free route in joint space from start_node to goal_node
     """
@@ -261,8 +178,6 @@ def astar_torus(grid, start_node, goal_node):
     if np.isinf(explored_heuristic_map[goal_node]):
         route = []
         print("No route found.")
-        global routestatus
-        routestatus = 0;
     else:
         route = [goal_node]
         while parent_map[route[0][0]][route[0][1]] != ():
@@ -318,6 +233,7 @@ def calc_heuristic_map(M, goal_node):
                                       j + 1 + heuristic_map[i, M - 1],
                                       M - j + heuristic_map[i, 0]
                                       )
+
     return heuristic_map
 
 
@@ -361,32 +277,17 @@ class NLinkArm(object):
                 (obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
             myplt.gca().add_patch(circle)
 
+        for i in range(self.n_links + 1):
+            if i is not self.n_links:
+                myplt.plot([self.points[i][0], self.points[i + 1][0]],
+                           [self.points[i][1], self.points[i + 1][1]], 'r-')
+            myplt.plot(self.points[i][0], self.points[i][1], 'k.')
+
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
         # myplt.pause(1e-5)
 
 
-np.set_printoptions(threshold=sys.maxsize)
-for z in range(1):
-    # Simulation parameters
-    M = 100
-    obstacles = []
-    randomTotal = int(random.random()*2 +1)
-    for x in range(randomTotal):
-        random1 = random.uniform(-2, 2)
-        random2 =random.uniform(-2, 2)
-        random3 = random.uniform(.4,.7)
-        obstacles.append([random1, random2,random3])
-    link_length = [0.5, 1.5]
-    initial_link_angle = [0, 0]
-    arm = NLinkArm(link_length, initial_link_angle)
-    grid = get_occupancy_grid(arm, obstacles)
-    f=open("cspace.dat", "a+")
-    s = np.array_str(grid)
-    if __name__ == '__main__':
-        main(z,obstacles)
-    f.write("test \n")
-    #if routestatus == 0:
-    #    plt.show()
-##np.savetxt('cspace.dat', grid2)
+if __name__ == '__main__':
+    main()
