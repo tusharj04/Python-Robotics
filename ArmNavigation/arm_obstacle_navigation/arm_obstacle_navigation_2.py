@@ -58,6 +58,10 @@ def main(number,obs):
     plt.imshow(goalgrid)
     plt.savefig('goalgrid{:04d}.png'.format(number))
     plt.clf()
+    grid = get_occupancy_grid(arm, obstacles)
+    plt.imshow(grid)
+    plt.savefig('cspacegrid{:04d}.png'.format(number))
+    plt.clf()
     ##grid2 = []
     ##grid2.append([grid])
     ##np.savetxt('cspace.dat', grid2)
@@ -82,9 +86,10 @@ def main(number,obs):
     plt.show()
     plt.savefig('workspacegrid{:04d}.png'.format(number))
     plt.clf()
+
     plt.pause(1e-5)
-#    if len(route) >= 0:
-#        animate(grid, arm, route)
+    #if len(route) >= 0:
+        #animate(grid, arm, route)
 #previous 2 lines commented out to fix goalgrid and startgrid
 
 
@@ -358,11 +363,11 @@ class NLinkArm(object):
 
 
 np.set_printoptions(threshold=sys.maxsize)
-for z in range(3):
+for z in range(1):
     # Simulation parameters
     M = 100
     obstacles = []
-    randomTotal = int(random.random()*4 +1)
+    randomTotal = int(random.random()*2 +1)
     for x in range(randomTotal):
         random1 = random.uniform(-2, 2)
         random2 =random.uniform(-2, 2)
@@ -374,11 +379,6 @@ for z in range(3):
     grid = get_occupancy_grid(arm, obstacles)
     f=open("cspace.dat", "a+")
     s = np.array_str(grid)
-    res = str(s)[1:-1]
-    f.write(res)
-    grid = get_occupancy_grid(arm, obstacles)
-    plt.imshow(grid)
-
     if __name__ == '__main__':
         main(z,obstacles)
     f.write("test \n")
