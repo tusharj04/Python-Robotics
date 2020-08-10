@@ -44,7 +44,10 @@ def main(number,obs):
     random2 =random.uniform(-2, 2)
     random3 = random.uniform(.4,.7)
     obstacles1.append([random1, random2,random3])
-    arm.plot_arm(plt, obs)
+    theta1 = 2 * pi * node[0] / M - pi
+    theta2 = 2 * pi * node[1] / M - pi
+    M = 100
+    arm.plot_arm(plt, obs, number, [theta1, theta2])
     plt.clf()
     # (x, y) co-ordinates in the joint space [cell]
     startx = int(random.random()*99)
@@ -108,7 +111,7 @@ def main(number,obs):
 #previous 2 lines commented out to fix goalgrid and startgrid
 
 
-def animate(grid, arm, route):
+def animate(grid, arm, route, number):
     fig, axs = plt.subplots(1, 2)
     fig.canvas.mpl_connect('key_press_event', press)
     colors = ['white', 'black', 'red', 'pink', 'yellow', 'green', 'orange']
@@ -130,8 +133,8 @@ def animate(grid, arm, route):
         # Uncomment here to save the sequence of frames
         # plt.savefig('frame{:04d}.png'.format(i))
         plt.pause(0.1)
-def animate2(obst):
 
+def animate2(obst):
     fig, axs = plt.subplots(1, 2)
     fig.canvas.mpl_connect('key_press_event', press)
     colors = ['white', 'black', 'red', 'pink', 'yellow', 'green', 'orange']
@@ -363,12 +366,14 @@ class NLinkArm(object):
 
         self.end_effector = np.array(self.points[self.n_links]).T
 
-    def plot_arm(self, myplt, obstacles):  # pragma: no cover
+    def plot_arm(self, myplt, obstacles, number, joint_angles):  # pragma: no cover
         myplt.cla()
+        self.update_joints(joint_angles)
         for i in range(self.n_links + 1):
             #if i is not self.n_links:
                 #myplt.plot([self.points[i][0], self.points[i + 1][0]],
                         #  [self.points[i][1], self.points[i + 1][1]], 'r-')
+
             myplt.plot(self.points[i][0], self.points[i][1], 'k.')
         print("test")
         myplt.xlim([-self.lim, self.lim])
