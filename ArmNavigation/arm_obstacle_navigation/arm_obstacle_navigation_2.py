@@ -43,11 +43,8 @@ def main(number,obs):
     random1 = random.uniform(-2, 2)
     random2 =random.uniform(-2, 2)
     random3 = random.uniform(.4,.7)
-    obstacles1.append([random1, random2,random3])
-    theta1 = 2 * pi * node[0] / M - pi
-    theta2 = 2 * pi * node[1] / M - pi
-    M = 100
-    arm.plot_arm(plt, obs, number, [theta1, theta2])
+    obstacles1.append([random1, random2, random3])
+    #arm.plot_arm(plt, obs, number, [20, 150]) #need to change this so that its the angle variable
     plt.clf()
     # (x, y) co-ordinates in the joint space [cell]
     startx = int(random.random()*99)
@@ -96,7 +93,6 @@ def main(number,obs):
             (obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
         print("plotted")
         plt.gca().add_patch(circle)
-
     limit = sum(link_length)
     plt.xlim([-limit, limit])
     plt.ylim([-limit, limit])
@@ -104,10 +100,15 @@ def main(number,obs):
     plt.show()
     plt.savefig('workspacegrid{:04d}.png'.format(number))
     plt.clf()
-
     plt.pause(1e-5)
+    for i, node in enumerate(route):
+        plt.cla()
+        grid[node] = 6
+        theta1 = 2 * pi * node[0] / M - pi
+        theta2 = 2 * pi * node[1] / M - pi
+        arm.plot_arm(plt, obstacles, number, [theta1, theta2])
     #if len(route) >= 0:
-        #animate(grid, arm, route)
+        #animate(grid, arm, route, number)
 #previous 2 lines commented out to fix goalgrid and startgrid
 
 
@@ -124,15 +125,16 @@ def animate(grid, arm, route, number):
         plt.imshow(grid, cmap=cmap, norm=norm, interpolation=None)
         theta1 = 2 * pi * node[0] / M - pi
         theta2 = 2 * pi * node[1] / M - pi
-        arm.update_joints([theta1, theta2])
+        ##arm.update_joints([theta1, theta2])
         plt.subplot(1, 2, 2)
-        arm.plot_arm(plt, obstacles=obstacles)
+        arm.plot_arm(plt, obstacles, number, [theta1, theta2])
         plt.xlim(-2.0, 2.0)
         plt.ylim(-3.0, 3.0)
         plt.show()
         # Uncomment here to save the sequence of frames
         # plt.savefig('frame{:04d}.png'.format(i))
         plt.pause(0.1)
+
 
 def animate2(obst):
     fig, axs = plt.subplots(1, 2)
@@ -363,31 +365,26 @@ class NLinkArm(object):
             self.points[i][1] = self.points[i - 1][1] + \
                 self.link_lengths[i - 1] * \
                 np.sin(np.sum(self.joint_angles[:i]))
-
         self.end_effector = np.array(self.points[self.n_links]).T
 
     def plot_arm(self, myplt, obstacles, number, joint_angles):  # pragma: no cover
-        myplt.cla()
         self.update_joints(joint_angles)
         for i in range(self.n_links + 1):
             #if i is not self.n_links:
                 #myplt.plot([self.points[i][0], self.points[i + 1][0]],
                         #  [self.points[i][1], self.points[i + 1][1]], 'r-')
-
             myplt.plot(self.points[i][0], self.points[i][1], 'k.')
         print("test")
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
         myplt.show()
-        number = 1
         myplt.savefig('test{:04d}.png'.format(number))
         myplt.clf()
         for obstacle in obstacles:
             circle = myplt.Circle(
                 (obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
             myplt.gca().add_patch(circle)
-
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
