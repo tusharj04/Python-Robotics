@@ -34,9 +34,18 @@ def press(event):
 def main(number,obs):
     # Arm geometry in the working space
     link_length = [0.5, 1.5]
-    initial_link_angle = [0, 0]
-    arm = NLinkArm(link_length, initial_link_angle)
+    initial_link_angle = [50, 0]
+    arm = NLinkArm(link_length, initial_link_angle, plt)
     numlinks = len(link_length)
+    obstacles1 = []
+    randomTotal = int(random.random()*2 +1)
+    #for x in range(randomTotal):, testing something must indent back pater
+    random1 = random.uniform(-2, 2)
+    random2 =random.uniform(-2, 2)
+    random3 = random.uniform(.4,.7)
+    obstacles1.append([random1, random2,random3])
+    arm.plot_arm(plt, obs)
+    plt.clf()
     # (x, y) co-ordinates in the joint space [cell]
     startx = int(random.random()*99)
     starty = int(random.random()*99)
@@ -46,9 +55,9 @@ def main(number,obs):
     goal = (goalx, goaly)
     s = (100,100)
     ##Whoever works next this is the code to plot the start one idrk
-    for i in range(self.n_links + 1):
-        if i is not self.n_links:
-        myplt.plot(self.points[i][0], self.points[i][1], 'k.')
+    #for i in range(self.n_links + 1):
+        #if i is not self.n_links:
+        #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
     global startgrid
     startgrid = np.zeros(s)
     startgrid[startx][starty] = 1;
@@ -67,6 +76,7 @@ def main(number,obs):
     plt.imshow(grid)
     plt.savefig('cspacegrid{:04d}.png'.format(number))
     plt.clf()
+
     ##grid2 = []
     ##grid2.append([grid])
     ##np.savetxt('cspace.dat', grid2)
@@ -326,7 +336,7 @@ class NLinkArm(object):
     Class for controlling and plotting a planar arm with an arbitrary number of links.
     """
 
-    def __init__(self, link_lengths, joint_angles):
+    def __init__(self, link_lengths, joint_angles, plt):
         self.n_links = len(link_lengths)
         if self.n_links != len(joint_angles):
             raise ValueError()
@@ -353,9 +363,21 @@ class NLinkArm(object):
 
         self.end_effector = np.array(self.points[self.n_links]).T
 
-    def plot_arm(self, myplt, obstacles=[]):  # pragma: no cover
+    def plot_arm(self, myplt, obstacles):  # pragma: no cover
         myplt.cla()
-
+        for i in range(self.n_links + 1):
+            #if i is not self.n_links:
+                #myplt.plot([self.points[i][0], self.points[i + 1][0]],
+                        #  [self.points[i][1], self.points[i + 1][1]], 'r-')
+            myplt.plot(self.points[i][0], self.points[i][1], 'k.')
+        print("test")
+        myplt.xlim([-self.lim, self.lim])
+        myplt.ylim([-self.lim, self.lim])
+        myplt.draw()
+        myplt.show()
+        number = 1
+        myplt.savefig('test{:04d}.png'.format(number))
+        myplt.clf()
         for obstacle in obstacles:
             circle = myplt.Circle(
                 (obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
@@ -364,6 +386,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
+
         # myplt.pause(1e-5)
 
 
@@ -373,14 +396,14 @@ for z in range(1):
     M = 100
     obstacles = []
     randomTotal = int(random.random()*2 +1)
-    for x in range(randomTotal):
-        random1 = random.uniform(-2, 2)
-        random2 =random.uniform(-2, 2)
-        random3 = random.uniform(.4,.7)
-        obstacles.append([random1, random2,random3])
+    #for x in range(randomTotal):, testing something must indent back pater
+    random1 = random.uniform(-2, 2)
+    random2 =random.uniform(-2, 2)
+    random3 = random.uniform(.4,.7)
+    obstacles.append([random1, random2,random3])
     link_length = [0.5, 1.5]
     initial_link_angle = [0, 0]
-    arm = NLinkArm(link_length, initial_link_angle)
+    arm = NLinkArm(link_length, initial_link_angle, plt)
     grid = get_occupancy_grid(arm, obstacles)
     f=open("cspace.dat", "a+")
     s = np.array_str(grid)
