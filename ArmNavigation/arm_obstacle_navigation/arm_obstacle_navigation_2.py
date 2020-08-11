@@ -33,6 +33,7 @@ def press(event):
 
 def main(number,obs):
     # Arm geometry in the working space
+    print("-------------------------------------------CSPACE NUMBER {:03d}".format(number))
     link_length = [0.5, 1.5]
     initial_link_angle = [50, 0]
     arm = NLinkArm(link_length, initial_link_angle, plt)
@@ -376,12 +377,11 @@ class NLinkArm(object):
                 #myplt.plot([self.points[i][0], self.points[i + 1][0]],
                         #  [self.points[i][1], self.points[i + 1][1]], 'r-')
             myplt.plot(self.points[i][0], self.points[i][1], 'k.')
-        print("test")
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
         myplt.show()
-        myplt.savefig('test{:03d}cspace{:03d}.png'.format(x, number))
+        myplt.savefig('finalarmconfig{:03d}cspace{:03d}.png'.format(x, number))
         myplt.clf()
         for obstacle in obstacles:
             circle = myplt.Circle(
