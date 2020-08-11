@@ -31,9 +31,13 @@ def press(event):
         sys.exit(0)
 
 
+filenamenumber = -1
+#global routestatus
+#routestatus = 0
+
 def main(number,obs):
     # Arm geometry in the working space
-    print("-------------------------------------------CSPACE NUMBER {:03d}".format(number))
+    print("-------------------------------------------CSPACE NUMBER {:03d}".format(number)) #number is the cspace number
     link_length = [0.5, 1.5]
     initial_link_angle = [50, 0]
     arm = NLinkArm(link_length, initial_link_angle, plt)
@@ -52,12 +56,15 @@ def main(number,obs):
         #for i in range(self.n_links + 1):
             #if i is not self.n_links:
             #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
+    plt.clf()
+    grid = get_occupancy_grid(arm, obstacles)
+    plt.imshow(grid)
+    plt.savefig('cspace{:03d}.png'.format(number))
+    plt.clf()
     for x in range(3):
-        plt.clf()
-        grid = get_occupancy_grid(arm, obstacles)
-        plt.imshow(grid)
-        plt.savefig('cspacegrid{:03d}.png'.format(number))
-        plt.clf()
+        global filenamenumber
+        filenamenumber += 1
+        print("FILE NAME NUMBER:{:03d}".format(filenamenumber))
         # (x, y) co-ordinates in the joint space [cell]
         startx = int(random.random()*99)
         starty = int(random.random()*99)
@@ -70,14 +77,14 @@ def main(number,obs):
         ##grid2 = []
         ##grid2.append([grid])
         ##np.savetxt('cspace.dat', grid2)
-        route = astar_torus(grid, start, goal)
+        route = astar_torus(grid, start, goal, filenamenumber)
         global routegrid
         routegrid = np.zeros(s)
         for i in range(1, len(route)):
             routegrid[route[i]] = 6
             plt.clf()
             plt.imshow(routegrid)
-            plt.savefig('routegrid{:03d}.png'.format(x, number))
+            plt.savefig('route{:03d}.png'.format(filenamenumber))
             plt.clf()
         for obstacle in obs:
             circle = plt.Circle(
@@ -88,7 +95,7 @@ def main(number,obs):
         plt.xlim([-limit, limit])
         plt.ylim([-limit, limit])
         plt.draw()
-        plt.savefig('workspacegrid{:03d}cspace{:03d}.png'.format(x, number))
+        plt.savefig('workspace{:03d}.png'.format(filenamenumber))
         plt.show()
         plt.clf()
         plt.pause(1e-5)
@@ -218,9 +225,7 @@ def get_occupancy_grid(arm, obstacles):
             grid[i][j] = int(collision_detected)
     return np.array(grid)
 
-
-
-def astar_torus(grid, start_node, goal_node):
+def astar_torus(grid, start_node, goal_node, number):
     """
 
     Finds a path between an initial and goal joint configuration using
@@ -275,9 +280,19 @@ def astar_torus(grid, start_node, goal_node):
 
     if np.isinf(explored_heuristic_map[goal_node]):
         route = []
+        #routestatus = 1
         print("No route found.")
-        global routestatus
-        routestatus = 0;
+        #s=(100,100)
+        #blank = np.zeros(s)
+        #plt.imshow(blank)
+        plt.plot()
+        plt.savefig('route{:03d}'.format(number))
+        plt.plot()
+        plt.savefig('startarmconfig{:03d}'.format(number))
+        #plt.imshow(blank)
+        plt.plot()
+        plt.savefig('finalarmconfig{:03d}'.format(number))
+
     else:
         route = [goal_node]
         while parent_map[route[0][0]][route[0][1]] != ():
@@ -370,6 +385,7 @@ class NLinkArm(object):
     def plot_arm(self, myplt, obstacles, number, joint_angles, x):  # pragma: no cover
         self.update_joints(joint_angles)
         for i in range(self.n_links + 1):
+            #print("this is the length of n_links {:03d}".format(i))
             #if i is not self.n_links:
                 #myplt.plot([self.points[i][0], self.points[i + 1][0]],
                         #  [self.points[i][1], self.points[i + 1][1]], 'r-')
@@ -377,7 +393,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('finalarmconfig{:03d}cspace{:03d}.png'.format(x, number))
+        myplt.savefig('finalarmconfig{:03d}'.format(filenamenumber))
         myplt.show()
 
         myplt.clf()
@@ -396,15 +412,15 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('startarmconfig{:03d}cspace{:03d}.png'.format(x, number))
+        myplt.savefig('startarmconfig{:03d}'.format(filenamenumber))
         myplt.show()
-
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
 
         # myplt.pause(1e-5)
+
 
 
 np.set_printoptions(threshold=sys.maxsize)
