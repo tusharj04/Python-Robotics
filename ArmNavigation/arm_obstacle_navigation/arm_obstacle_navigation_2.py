@@ -66,20 +66,6 @@ def main(number,obs):
         goal = (goalx, goaly)
         s = (100,100)
         #startgrid
-        global startgrid
-        startgrid = np.zeros(s)
-        startgrid[startx][starty] = 1;
-        plt.imshow(startgrid)
-        plt.savefig('startgrid{:03d}cspace{:03d}.png'.format(x, number)) #number is the cspace number and x is the randomization number on that cspace
-        plt.clf()
-        #goalgrid
-        global goalgrid
-        goalgrid = np.zeros(s)
-        goalgrid[goalx][goaly] = 1;
-        #plt.savefig('startgrid{:04d}.png'.format(number))
-        plt.imshow(goalgrid)
-        plt.savefig('goalgrid{:03d}cspace{:03d}.png'.format(x, number))
-        plt.clf()
         ##grid2 = []
         ##grid2.append([grid])
         ##np.savetxt('cspace.dat', grid2)
@@ -104,12 +90,21 @@ def main(number,obs):
         plt.savefig('workspacegrid{:03d}cspace{:03d}.png'.format(x, number))
         plt.clf()
         plt.pause(1e-5)
+        #first/start arm conifg
         for i, node in enumerate(route):
-            plt.cla()
-            grid[node] = 6
-            theta1 = 2 * pi * node[0] / M - pi
-            theta2 = 2 * pi * node[1] / M - pi
-            arm.plot_arm(plt, obstacles, number, [theta1, theta2], x)
+            if i == 0:
+
+                plt.cla()
+                grid[node] = 6
+                theta1 = 2 * pi * node[0] / M - pi
+                theta2 = 2 * pi * node[1] / M - pi
+                arm.plot_arm2(plt, obstacles, number, [theta1, theta2], x)
+            if i == len(route) - 1:
+                plt.cla()
+                grid[node] = 6
+                theta1 = 2 * pi * node[0] / M - pi
+                theta2 = 2 * pi * node[1] / M - pi
+                arm.plot_arm(plt, obstacles, number, [theta1, theta2], x)
             #if len(route) >= 0:
             #animate(grid, arm, route, number)
             #previous 2 lines commented out to fix goalgrid and startgrid
@@ -383,10 +378,24 @@ class NLinkArm(object):
         myplt.show()
         myplt.savefig('finalarmconfig{:03d}cspace{:03d}.png'.format(x, number))
         myplt.clf()
-        for obstacle in obstacles:
-            circle = myplt.Circle(
-                (obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
-            myplt.gca().add_patch(circle)
+        myplt.xlim([-self.lim, self.lim])
+        myplt.ylim([-self.lim, self.lim])
+        myplt.draw()
+
+        # myplt.pause(1e-5)
+    def plot_arm2(self, myplt, obstacles, number, joint_angles, x):  # pragma: no cover
+        self.update_joints(joint_angles)
+        for i in range(self.n_links + 1):
+            #if i is not self.n_links:
+                #myplt.plot([self.points[i][0], self.points[i + 1][0]],
+                        #  [self.points[i][1], self.points[i + 1][1]], 'r-')
+            myplt.plot(self.points[i][0], self.points[i][1], 'k.')
+        myplt.xlim([-self.lim, self.lim])
+        myplt.ylim([-self.lim, self.lim])
+        myplt.draw()
+        myplt.show()
+        myplt.savefig('startarmconfig{:03d}cspace{:03d}.png'.format(x, number))
+        myplt.clf()
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
