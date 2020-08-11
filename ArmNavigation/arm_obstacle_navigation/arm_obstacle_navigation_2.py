@@ -46,17 +46,18 @@ def main(number,obs):
     random3 = random.uniform(.4,.7)
     obstacles1.append([random1, random2, random3])
     #arm.plot_arm(plt, obs, number, [20, 150]) #need to change this so that its the angle variable
-    plt.clf()
-    grid = get_occupancy_grid(arm, obstacles)
-    plt.imshow(grid)
-    plt.savefig('cspacegrid{:03d}.png'.format(number))
-    plt.clf()
+
         ##what r the comments below saying??
         ##Whoever works next this is the code to plot the start one idrk
         #for i in range(self.n_links + 1):
             #if i is not self.n_links:
             #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
     for x in range(3):
+        plt.clf()
+        grid = get_occupancy_grid(arm, obstacles)
+        plt.imshow(grid)
+        plt.savefig('cspacegrid{:03d}.png'.format(number))
+        plt.clf()
         # (x, y) co-ordinates in the joint space [cell]
         startx = int(random.random()*99)
         starty = int(random.random()*99)
@@ -74,8 +75,9 @@ def main(number,obs):
         routegrid = np.zeros(s)
         for i in range(1, len(route)):
             routegrid[route[i]] = 6
+            plt.clf()
             plt.imshow(routegrid)
-            plt.savefig('routegrid{:03d}cspace{:03d}.png'.format(x, number))
+            plt.savefig('routegrid{:03d}.png'.format(x, number))
             plt.clf()
         for obstacle in obs:
             circle = plt.Circle(
@@ -86,8 +88,8 @@ def main(number,obs):
         plt.xlim([-limit, limit])
         plt.ylim([-limit, limit])
         plt.draw()
-        plt.show()
         plt.savefig('workspacegrid{:03d}cspace{:03d}.png'.format(x, number))
+        plt.show()
         plt.clf()
         plt.pause(1e-5)
         #first/start arm conifg
@@ -375,8 +377,9 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.show()
         myplt.savefig('finalarmconfig{:03d}cspace{:03d}.png'.format(x, number))
+        myplt.show()
+
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
@@ -393,8 +396,9 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.show()
         myplt.savefig('startarmconfig{:03d}cspace{:03d}.png'.format(x, number))
+        myplt.show()
+
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
