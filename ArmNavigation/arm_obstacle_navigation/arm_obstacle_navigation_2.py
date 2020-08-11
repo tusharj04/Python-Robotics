@@ -46,70 +46,72 @@ def main(number,obs):
     obstacles1.append([random1, random2, random3])
     #arm.plot_arm(plt, obs, number, [20, 150]) #need to change this so that its the angle variable
     plt.clf()
-    # (x, y) co-ordinates in the joint space [cell]
-    startx = int(random.random()*99)
-    starty = int(random.random()*99)
-    goalx = int(random.random()*99)
-    goaly = int(random.random()*99)
-    start = (startx,starty)
-    goal = (goalx, goaly)
-    s = (100,100)
-    ##Whoever works next this is the code to plot the start one idrk
-    #for i in range(self.n_links + 1):
-        #if i is not self.n_links:
-        #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
-    global startgrid
-    startgrid = np.zeros(s)
-    startgrid[startx][starty] = 1;
-    plt.imshow(startgrid)
-    plt.savefig('startgrid{:04d}.png'.format(number))
-    plt.clf()
-    #goalgrid
-    global goalgrid
-    goalgrid = np.zeros(s)
-    goalgrid[goalx][goaly] = 1;
-    #plt.savefig('startgrid{:04d}.png'.format(number))
-    plt.imshow(goalgrid)
-    plt.savefig('goalgrid{:04d}.png'.format(number))
-    plt.clf()
     grid = get_occupancy_grid(arm, obstacles)
     plt.imshow(grid)
-    plt.savefig('cspacegrid{:04d}.png'.format(number))
+    plt.savefig('cspacegrid{:03d}.png'.format(number))
     plt.clf()
-
-    ##grid2 = []
-    ##grid2.append([grid])
-    ##np.savetxt('cspace.dat', grid2)
-    route = astar_torus(grid, start, goal)
-    global routegrid
-    routegrid = np.zeros(s)
-    for i in range(1, len(route)):
-        routegrid[route[i]] = 6
-    plt.imshow(routegrid)
-    plt.savefig('routegrid{:04d}.png'.format(number))
-    plt.clf()
-    for obstacle in obs:
-        circle = plt.Circle(
+        ##what r the comments below saying??
+        ##Whoever works next this is the code to plot the start one idrk
+        #for i in range(self.n_links + 1):
+            #if i is not self.n_links:
+            #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
+    for x in range(3):
+        # (x, y) co-ordinates in the joint space [cell]
+        startx = int(random.random()*99)
+        starty = int(random.random()*99)
+        goalx = int(random.random()*99)
+        goaly = int(random.random()*99)
+        start = (startx,starty)
+        goal = (goalx, goaly)
+        s = (100,100)
+        #startgrid
+        global startgrid
+        startgrid = np.zeros(s)
+        startgrid[startx][starty] = 1;
+        plt.imshow(startgrid)
+        plt.savefig('startgrid{:03d}cspace{:03d}.png'.format(x, number)) #number is the cspace number and x is the randomization number on that cspace
+        plt.clf()
+        #goalgrid
+        global goalgrid
+        goalgrid = np.zeros(s)
+        goalgrid[goalx][goaly] = 1;
+        #plt.savefig('startgrid{:04d}.png'.format(number))
+        plt.imshow(goalgrid)
+        plt.savefig('goalgrid{:03d}cspace{:03d}.png'.format(x, number))
+        plt.clf()
+        ##grid2 = []
+        ##grid2.append([grid])
+        ##np.savetxt('cspace.dat', grid2)
+        route = astar_torus(grid, start, goal)
+        global routegrid
+        routegrid = np.zeros(s)
+        for i in range(1, len(route)):
+            routegrid[route[i]] = 6
+            plt.imshow(routegrid)
+            plt.savefig('routegrid{:03d}cspace{:03d}.png'.format(x, number))
+            plt.clf()
+        for obstacle in obs:
+            circle = plt.Circle(
             (obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
-        print("plotted")
-        plt.gca().add_patch(circle)
-    limit = sum(link_length)
-    plt.xlim([-limit, limit])
-    plt.ylim([-limit, limit])
-    plt.draw()
-    plt.show()
-    plt.savefig('workspacegrid{:04d}.png'.format(number))
-    plt.clf()
-    plt.pause(1e-5)
-    for i, node in enumerate(route):
-        plt.cla()
-        grid[node] = 6
-        theta1 = 2 * pi * node[0] / M - pi
-        theta2 = 2 * pi * node[1] / M - pi
-        arm.plot_arm(plt, obstacles, number, [theta1, theta2])
-    #if len(route) >= 0:
-        #animate(grid, arm, route, number)
-#previous 2 lines commented out to fix goalgrid and startgrid
+            print("plotted")
+            plt.gca().add_patch(circle)
+        limit = sum(link_length)
+        plt.xlim([-limit, limit])
+        plt.ylim([-limit, limit])
+        plt.draw()
+        plt.show()
+        plt.savefig('workspacegrid{:03d}cspace{:03d}.png'.format(x, number))
+        plt.clf()
+        plt.pause(1e-5)
+        for i, node in enumerate(route):
+            plt.cla()
+            grid[node] = 6
+            theta1 = 2 * pi * node[0] / M - pi
+            theta2 = 2 * pi * node[1] / M - pi
+            arm.plot_arm(plt, obstacles, number, [theta1, theta2], x)
+            #if len(route) >= 0:
+            #animate(grid, arm, route, number)
+            #previous 2 lines commented out to fix goalgrid and startgrid
 
 
 def animate(grid, arm, route, number):
@@ -367,7 +369,7 @@ class NLinkArm(object):
                 np.sin(np.sum(self.joint_angles[:i]))
         self.end_effector = np.array(self.points[self.n_links]).T
 
-    def plot_arm(self, myplt, obstacles, number, joint_angles):  # pragma: no cover
+    def plot_arm(self, myplt, obstacles, number, joint_angles, x):  # pragma: no cover
         self.update_joints(joint_angles)
         for i in range(self.n_links + 1):
             #if i is not self.n_links:
@@ -379,7 +381,7 @@ class NLinkArm(object):
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
         myplt.show()
-        myplt.savefig('test{:04d}.png'.format(number))
+        myplt.savefig('test{:03d}cspace{:03d}.png'.format(x, number))
         myplt.clf()
         for obstacle in obstacles:
             circle = myplt.Circle(
@@ -393,7 +395,7 @@ class NLinkArm(object):
 
 
 np.set_printoptions(threshold=sys.maxsize)
-for z in range(1):
+for z in range(2):
     # Simulation parameters
     M = 100
     obstacles = []
@@ -407,11 +409,11 @@ for z in range(1):
     initial_link_angle = [0, 0]
     arm = NLinkArm(link_length, initial_link_angle, plt)
     grid = get_occupancy_grid(arm, obstacles)
-    f=open("cspace.dat", "a+")
+    #f=open("cspace.dat", "a+")
     s = np.array_str(grid)
     if __name__ == '__main__':
         main(z,obstacles)
-    f.write("test \n")
+    #f.write("test \n")
     #if routestatus == 0:
     #    plt.show()
 ##np.savetxt('cspace.dat', grid2)
