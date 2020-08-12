@@ -52,10 +52,6 @@ def main(number,obs):
 
     for x in range(100):
         plt.clf()
-        grid = get_occupancy_grid(arm, obstacles)
-        plt.imshow(grid)
-        plt.savefig('cspace{:03d}.png'.format(number))
-        plt.clf()
         global filenamenumber
         filenamenumber += 1
         print("FILE NAME NUMBER:{:03d}".format(filenamenumber))
@@ -79,7 +75,7 @@ def main(number,obs):
             routegrid[route[i]] = 6
             plt.clf()
             plt.imshow(routegrid)
-            plt.savefig('route{:03d}.png'.format(filenamenumber))
+            plt.savefig('routegrid/cspace{:03d}.png'.format(filenamenumber))
             plt.clf()
         for obstacle in obs:
             circle = plt.Circle(
@@ -90,7 +86,7 @@ def main(number,obs):
         plt.xlim([-limit, limit])
         plt.ylim([-limit, limit])
         plt.draw()
-        plt.savefig('workspace{:03d}.png'.format(filenamenumber))
+        plt.savefig('workspacegrid/workspace{:03d}.png'.format(filenamenumber))
         plt.show()
         plt.clf()
         plt.pause(1e-5)
@@ -377,7 +373,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('finalarmconfig{:03d}'.format(filenamenumber))
+        myplt.savefig('finalarmconfig/finalarmconfig{:03d}'.format(filenamenumber))
 
         myplt.show()
         myplt.clf()
@@ -397,7 +393,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('startarmconfig{:03d}'.format(filenamenumber))
+        myplt.savefig('startarmconfig/startarmconfig{:03d}'.format(filenamenumber))
 
         myplt.show()
         myplt.clf()
