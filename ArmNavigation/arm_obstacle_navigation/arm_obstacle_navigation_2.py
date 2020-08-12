@@ -42,13 +42,6 @@ def main(number,obs):
     initial_link_angle = [50, 0]
     arm = NLinkArm(link_length, initial_link_angle, plt)
     numlinks = len(link_length)
-    obstacles1 = []
-    randomTotal = int(random.random()*2 +1)
-    #for x in range(randomTotal):, testing something must indent back pater
-    random1 = random.uniform(-2, 2)
-    random2 =random.uniform(-2, 2)
-    random3 = random.uniform(.4,.7)
-    obstacles1.append([random1, random2, random3])
     #arm.plot_arm(plt, obs, number, [20, 150]) #need to change this so that its the angle variable
 
         ##what r the comments below saying??
@@ -56,12 +49,13 @@ def main(number,obs):
         #for i in range(self.n_links + 1):
             #if i is not self.n_links:
             #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
-    plt.clf()
-    grid = get_occupancy_grid(arm, obstacles)
-    plt.imshow(grid)
-    plt.savefig('cspace{:03d}.png'.format(number))
-    plt.clf()
-    for x in range(3):
+
+    for x in range(100):
+        plt.clf()
+        grid = get_occupancy_grid(arm, obstacles)
+        plt.imshow(grid)
+        plt.savefig('cspace{:03d}.png'.format(number))
+        plt.clf()
         global filenamenumber
         filenamenumber += 1
         print("FILE NAME NUMBER:{:03d}".format(filenamenumber))
@@ -78,6 +72,7 @@ def main(number,obs):
         ##grid2.append([grid])
         ##np.savetxt('cspace.dat', grid2)
         route = astar_torus(grid, start, goal, filenamenumber)
+
         global routegrid
         routegrid = np.zeros(s)
         for i in range(1, len(route)):
@@ -287,11 +282,8 @@ def astar_torus(grid, start_node, goal_node, number):
         #plt.imshow(blank)
         plt.plot()
         plt.savefig('route{:03d}'.format(number))
-        plt.plot()
-        plt.savefig('startarmconfig{:03d}'.format(number))
-        #plt.imshow(blank)
-        plt.plot()
-        plt.savefig('finalarmconfig{:03d}'.format(number))
+
+
 
     else:
         route = [goal_node]
@@ -299,15 +291,7 @@ def astar_torus(grid, start_node, goal_node, number):
             route.insert(0, parent_map[route[0][0]][route[0][1]])
 
         print("The route found covers %d grid cells." % len(route))
-        for i in range(1, len(route)):
-            grid[route[i]] = 6
-            plt.cla()
-            # for stopping simulation with the esc key.
-            plt.gcf().canvas.mpl_connect('key_release_event',
-                    lambda event: [exit(0) if event.key == 'escape' else None])
-            plt.imshow(grid, cmap=cmap, norm=norm, interpolation=None)
-            plt.show()
-            plt.pause(1e-2)
+
 
     return route
 
@@ -384,18 +368,18 @@ class NLinkArm(object):
 
     def plot_arm(self, myplt, obstacles, number, joint_angles, x):  # pragma: no cover
         self.update_joints(joint_angles)
-        for i in range(self.n_links + 1):
-            #print("this is the length of n_links {:03d}".format(i))
+        #for i in range(self.n_links + 1):
+        i = self.n_links
             #if i is not self.n_links:
                 #myplt.plot([self.points[i][0], self.points[i + 1][0]],
                         #  [self.points[i][1], self.points[i + 1][1]], 'r-')
-            myplt.plot(self.points[i][0], self.points[i][1], 'k.')
+        myplt.plot(self.points[i][0], self.points[i][1], 'k.')
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
         myplt.savefig('finalarmconfig{:03d}'.format(filenamenumber))
-        myplt.show()
 
+        myplt.show()
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
@@ -404,15 +388,17 @@ class NLinkArm(object):
         # myplt.pause(1e-5)
     def plot_arm2(self, myplt, obstacles, number, joint_angles, x):  # pragma: no cover
         self.update_joints(joint_angles)
-        for i in range(self.n_links + 1):
+        #for i in range(self.n_links + 1):
+        i = self.n_links
             #if i is not self.n_links:
                 #myplt.plot([self.points[i][0], self.points[i + 1][0]],
                         #  [self.points[i][1], self.points[i + 1][1]], 'r-')
-            myplt.plot(self.points[i][0], self.points[i][1], 'k.')
+        myplt.plot(self.points[i][0], self.points[i][1], 'k.')
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
         myplt.savefig('startarmconfig{:03d}'.format(filenamenumber))
+
         myplt.show()
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
@@ -424,12 +410,16 @@ class NLinkArm(object):
 
 
 np.set_printoptions(threshold=sys.maxsize)
-for z in range(2):
+for z in range(100):
     # Simulation parameters
     M = 100
     obstacles = []
     randomTotal = int(random.random()*2 +1)
     #for x in range(randomTotal):, testing something must indent back pater
+    random1 = random.uniform(-2, 2)
+    random2 =random.uniform(-2, 2)
+    random3 = random.uniform(.4,.7)
+    obstacles.append([random1, random2,random3])
     random1 = random.uniform(-2, 2)
     random2 =random.uniform(-2, 2)
     random3 = random.uniform(.4,.7)
