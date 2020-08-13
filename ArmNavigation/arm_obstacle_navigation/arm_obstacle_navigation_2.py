@@ -37,7 +37,7 @@ filenamenumber = -1
 
 def main(number,obs):
     # Arm geometry in the working space
-    print("-------------------------------------------CSPACE NUMBER {:03d}".format(number)) #number is the cspace number
+    print("-------------------------------------------CSPACE NUMBER {:05d}".format(number)) #number is the cspace number
     link_length = [0.5, 1.5]
     initial_link_angle = [50, 0]
     arm = NLinkArm(link_length, initial_link_angle, plt)
@@ -50,15 +50,15 @@ def main(number,obs):
             #if i is not self.n_links:
             #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
 
-    for x in range(2):
+    for x in range(100):
         plt.clf()
         grid = get_occupancy_grid(arm, obstacles)
         plt.imshow(grid)
-        plt.savefig('cspacegrid/cspace{:03d}.png'.format(number))
+        plt.savefig('cspacegrid/cspace{:05d}.png'.format(number))
         plt.clf()
         global filenamenumber
         filenamenumber += 1
-        print("FILE NAME NUMBER:{:03d}".format(filenamenumber))
+        print("FILE NAME NUMBER:{:05d}".format(filenamenumber))
         # (x, y) co-ordinates in the joint space [cell]
         startx = int(random.random()*99)
         starty = int(random.random()*99)
@@ -79,7 +79,7 @@ def main(number,obs):
             routegrid[route[i]] = 6
             plt.clf()
             plt.imshow(routegrid)
-            plt.savefig('routegrid/route{:03d}.png'.format(filenamenumber))
+            plt.savefig('routegrid/route{:05d}.png'.format(filenamenumber))
             plt.clf()
         for obstacle in obs:
             circle = plt.Circle(
@@ -90,7 +90,7 @@ def main(number,obs):
         plt.xlim([-limit, limit])
         plt.ylim([-limit, limit])
         plt.draw()
-        plt.savefig('workspacegrid/workspace{:03d}.png'.format(filenamenumber))
+        plt.savefig('workspacegrid/workspace{:05d}.png'.format(filenamenumber))
         plt.show()
         plt.clf()
         plt.pause(1e-5)
@@ -280,9 +280,17 @@ def astar_torus(grid, start_node, goal_node, number):
         #blank = np.zeros(s)
         #plt.imshow(blank)
         plt.plot()
-        plt.savefig('routegrid/route{:03d}'.format(number))
-
-
+        plt.savefig('routegrid/route{:05d}'.format(number))
+        plt.cla()
+        grid[start_node] = 6
+        theta1 = 2 * pi * start_node[0] / M - pi
+        theta2 = 2 * pi * start_node[1] / M - pi
+        arm.plot_arm2(plt, obstacles, number, [theta1, theta2])
+        plt.cla()
+        grid[goal_node] = 6
+        theta1 = 2 * pi * goal_node[0] / M - pi
+        theta2 = 2 * pi * goal_node[1] / M - pi
+        arm.plot_arm(plt, obstacles, number, [theta1, theta2])
 
     else:
         route = [goal_node]
@@ -365,7 +373,7 @@ class NLinkArm(object):
                 np.sin(np.sum(self.joint_angles[:i]))
         self.end_effector = np.array(self.points[self.n_links]).T
 
-    def plot_arm(self, myplt, obstacles, number, joint_angles, x):  # pragma: no cover
+    def plot_arm(self, myplt, obstacles, number, joint_angles):  # pragma: no cover
         self.update_joints(joint_angles)
         #for i in range(self.n_links + 1):
         i = self.n_links
@@ -376,7 +384,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('finalarmconfig/finalarmconfig{:03d}'.format(filenamenumber))
+        myplt.savefig('finalarmconfig/finalarmconfig{:05d}'.format(filenamenumber))
 
         myplt.show()
         myplt.clf()
@@ -385,7 +393,7 @@ class NLinkArm(object):
         myplt.draw()
 
         # myplt.pause(1e-5)
-    def plot_arm2(self, myplt, obstacles, number, joint_angles, x):  # pragma: no cover
+    def plot_arm2(self, myplt, obstacles, number, joint_angles):  # pragma: no cover
         self.update_joints(joint_angles)
         #for i in range(self.n_links + 1):
         i = self.n_links
@@ -396,7 +404,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('startarmconfig/startarmconfig{:03d}'.format(filenamenumber))
+        myplt.savefig('startarmconfig/startarmconfig{:05d}'.format(filenamenumber))
         myplt.show()
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
@@ -408,7 +416,7 @@ class NLinkArm(object):
 
 
 np.set_printoptions(threshold=sys.maxsize)
-for z in range(2):
+for z in range(100):
     # Simulation parameters
     M = 100
     obstacles = []
