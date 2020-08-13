@@ -101,13 +101,13 @@ def main(number,obs):
                 grid[node] = 6
                 theta1 = 2 * pi * node[0] / M - pi
                 theta2 = 2 * pi * node[1] / M - pi
-                arm.plot_arm2(plt, obstacles, number, [theta1, theta2], x)
+                arm.plot_arm2(plt, obstacles, number, [theta1, theta2])
             if i == len(route) - 1:
                 plt.cla()
                 grid[node] = 6
                 theta1 = 2 * pi * node[0] / M - pi
                 theta2 = 2 * pi * node[1] / M - pi
-                arm.plot_arm(plt, obstacles, number, [theta1, theta2], x)
+                arm.plot_arm(plt, obstacles, number, [theta1, theta2])
             #if len(route) >= 0:
             #animate(grid, arm, route, number)
             #previous 2 lines commented out to fix goalgrid and startgrid
