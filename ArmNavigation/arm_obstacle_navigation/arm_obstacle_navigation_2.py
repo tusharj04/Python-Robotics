@@ -50,7 +50,11 @@ def main(number,obs):
             #if i is not self.n_links:
             #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
 
-    for x in range(100):
+    for x in range(2):
+        plt.clf()
+        grid = get_occupancy_grid(arm, obstacles)
+        plt.imshow(grid)
+        plt.savefig('cspacegrid/cspace{:03d}.png'.format(number))
         plt.clf()
         global filenamenumber
         filenamenumber += 1
@@ -75,7 +79,7 @@ def main(number,obs):
             routegrid[route[i]] = 6
             plt.clf()
             plt.imshow(routegrid)
-            plt.savefig('routegrid/cspace{:03d}.png'.format(filenamenumber))
+            plt.savefig('routegrid/route{:03d}.png'.format(filenamenumber))
             plt.clf()
         for obstacle in obs:
             circle = plt.Circle(
@@ -93,7 +97,6 @@ def main(number,obs):
         #first/start arm conifg
         for i, node in enumerate(route):
             if i == 0:
-
                 plt.cla()
                 grid[node] = 6
                 theta1 = 2 * pi * node[0] / M - pi
@@ -277,7 +280,7 @@ def astar_torus(grid, start_node, goal_node, number):
         #blank = np.zeros(s)
         #plt.imshow(blank)
         plt.plot()
-        plt.savefig('route{:03d}'.format(number))
+        plt.savefig('routegrid/route{:03d}'.format(number))
 
 
 
@@ -394,7 +397,6 @@ class NLinkArm(object):
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
         myplt.savefig('startarmconfig/startarmconfig{:03d}'.format(filenamenumber))
-
         myplt.show()
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
@@ -406,7 +408,7 @@ class NLinkArm(object):
 
 
 np.set_printoptions(threshold=sys.maxsize)
-for z in range(100):
+for z in range(2):
     # Simulation parameters
     M = 100
     obstacles = []
