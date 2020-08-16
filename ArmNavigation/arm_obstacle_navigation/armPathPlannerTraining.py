@@ -1,11 +1,62 @@
 
 import keras
-from keras.layers import Input, Conv2D, Dropout
+from keras.layers import keras.processing.image import ImageDataGenerator
+import Input, Conv2D, Dropout
 from keras.layers.normalization import BatchNormalization
 from keras.models import Model, load_model
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 import numpy as np
+
+
+#Preprocessing the training set
+train_datagen = ImageDataGenerator(
+        rescale=1./255,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True)
+training_set = train_datagen.flow_from_directory(
+        'dataset/training_set',
+        target_size=(100, 100), #need to decide whether we plan to use 100x100 data size for the images cuz its gonna take a long time to train then
+        batch_size=32,
+        class_mode='binary') #what type of class mode is it
+
+#Preprocessing the test set
+test_datagen = ImageDataGenerator(rescale=1./255)
+test_set = test_datagen.flow_from_directory(
+        'dataset/test_set',
+        target_size=(150, 150), #also need to decide the images here
+        batch_size=32,
+        class_mode='binary') #need to determine the proper class mode
+
+#Initializing the CNN
+cnn = tf.keras.models.Sequential()
+
+#Convolution
+cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, activation='relu', input_shape[100, 100, 3])) #need to update this to te size of the images
+
+#Pooling
+cnn.add(tf.keras.layers.MaxPool2D(pool_szie=2, strides=2))
+
+#Second Convolutional Layer
+cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, activation='relu')) #need to update this to te size of the images
+cnn.add(tf.keras.layers.MaxPool2D(pool_szie=2, strides=2))
+
+#Flattening
+cnn.add(tf.keras.layers.Flatten())
+
+#Full Connection
+cnn.add(tf.keras.layer.Dense(units=128, activation='relu'))
+
+#Output Layer
+cnn.add(tf.keras.layer.Dense(units=1, activation='sigmoid')) #need to change units so that it is not binary classification
+
+#Training the cnn
+cnn.compile(optimizer='adam', loss = 'binary_crossentropy', metrcis = ['accuracy'])
+
+#Training the cnn on the training set and evaluating it on the test set
+cnn.fit(x = training_set, validation_data = test_set, epochs = )
+
 
 input_path = '../data_2/maze_10x10_rnd/'
 # input_path = '../data_2/maze_15x15_rnd/'

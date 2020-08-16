@@ -136,7 +136,6 @@ def animate(grid, arm, route, number):
         # plt.savefig('frame{:04d}.png'.format(i))
         plt.pause(0.1)
 
-
 def animate2(obst):
     fig, axs = plt.subplots(1, 2)
     fig.canvas.mpl_connect('key_press_event', press)
