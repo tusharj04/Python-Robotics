@@ -50,7 +50,7 @@ def main(number,obs):
             #if i is not self.n_links:
             #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
 
-    for x in range(100):
+    for x in range(10):
         plt.clf()
         grid = get_occupancy_grid(arm, obstacles)
         plt.imshow(grid)
@@ -135,6 +135,7 @@ def animate(grid, arm, route, number):
         # Uncomment here to save the sequence of frames
         # plt.savefig('frame{:04d}.png'.format(i))
         plt.pause(0.1)
+
 
 def animate2(obst):
     fig, axs = plt.subplots(1, 2)
