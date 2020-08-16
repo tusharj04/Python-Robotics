@@ -16,7 +16,7 @@ train_datagen = ImageDataGenerator(
         zoom_range=0.2,
         horizontal_flip=True)
 training_set = train_datagen.flow_from_directory(
-        'dataset/training_set',
+        'finalarmconfig', 'startarmconfig', 'workspacegrid'
         target_size=(100, 100), #need to decide whether we plan to use 100x100 data size for the images cuz its gonna take a long time to train then
         batch_size=32,
         class_mode='binary') #what type of class mode is it
