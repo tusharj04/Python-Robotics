@@ -54,7 +54,7 @@ def main(number,obs):
         plt.clf()
         grid = get_occupancy_grid(arm, obstacles)
         plt.imshow(grid)
-        plt.savefig('cspacegrid/cspace{:05d}.png'.format(number))
+        plt.savefig('testsetcspace/cspace{:05d}.png'.format(number))
         plt.clf()
         global filenamenumber
         filenamenumber += 1
@@ -79,7 +79,7 @@ def main(number,obs):
             routegrid[route[i]] = 6
             plt.clf()
             plt.imshow(routegrid)
-            plt.savefig('routegrid/route{:05d}.png'.format(filenamenumber))
+            plt.savefig('testsetroute/route{:05d}.png'.format(filenamenumber))
             plt.clf()
         for obstacle in obs:
             circle = plt.Circle(
@@ -90,7 +90,7 @@ def main(number,obs):
         plt.xlim([-limit, limit])
         plt.ylim([-limit, limit])
         plt.draw()
-        plt.savefig('workspacegrid/workspace{:05d}.png'.format(filenamenumber))
+        plt.savefig('testsetworkspace/workspace{:05d}.png'.format(filenamenumber))
         plt.show()
         plt.clf()
         plt.pause(1e-5)
@@ -280,7 +280,7 @@ def astar_torus(grid, start_node, goal_node, number):
         #blank = np.zeros(s)
         #plt.imshow(blank)
         plt.plot()
-        plt.savefig('routegrid/route{:05d}'.format(number))
+        plt.savefig('testsetroute/route{:05d}'.format(number))
         plt.cla()
         grid[start_node] = 6
         theta1 = 2 * pi * start_node[0] / M - pi
@@ -384,7 +384,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('finalarmconfig/finalarmconfig{:05d}'.format(filenamenumber))
+        myplt.savefig('testsetfinalarmconfig/finalarmconfig{:05d}'.format(filenamenumber))
 
         myplt.show()
         myplt.clf()
@@ -404,7 +404,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('startarmconfig/startarmconfig{:05d}'.format(filenamenumber))
+        myplt.savefig('testsetstartarmconfig/startarmconfig{:05d}'.format(filenamenumber))
         myplt.show()
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
