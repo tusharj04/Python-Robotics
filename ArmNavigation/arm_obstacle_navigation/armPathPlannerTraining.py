@@ -16,7 +16,7 @@ train_datagen = ImageDataGenerator(
         zoom_range=0.2,
         horizontal_flip=True)
 training_set = train_datagen.flow_from_directory(
-        'finalarmconfig', 'startarmconfig', 'workspacegrid'
+        'arm_obstacle_navigation/training_set'
         target_size=(100, 100), #need to decide whether we plan to use 100x100 data size for the images cuz its gonna take a long time to train then
         batch_size=32,
         class_mode='binary') #what type of class mode is it
@@ -24,8 +24,8 @@ training_set = train_datagen.flow_from_directory(
 #Preprocessing the test set
 test_datagen = ImageDataGenerator(rescale=1./255)
 test_set = test_datagen.flow_from_directory(
-        'dataset/test_set',
-        target_size=(150, 150), #also need to decide the images here
+        'arm_obstacle_navigation/test_set',
+        target_size=(100, 100), #also need to decide the images here
         batch_size=32,
         class_mode='binary') #need to determine the proper class mode
 
@@ -36,11 +36,11 @@ cnn = tf.keras.models.Sequential()
 cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, activation='relu', input_shape[100, 100, 3])) #need to update this to te size of the images
 
 #Pooling
-cnn.add(tf.keras.layers.MaxPool2D(pool_szie=2, strides=2))
+cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, strides=2))
 
 #Second Convolutional Layer
 cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, activation='relu')) #need to update this to te size of the images
-cnn.add(tf.keras.layers.MaxPool2D(pool_szie=2, strides=2))
+cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, strides=2))
 
 #Flattening
 cnn.add(tf.keras.layers.Flatten())
@@ -69,8 +69,8 @@ s_map = np.loadtxt(input_path + 's_maps.dat')
 g_map = np.loadtxt(input_path + 'g_maps.dat')
 y = np.loadtxt(input_path + 'outputs.dat')
 
-m = x.shape[0] #there are 30.000 samples in the dataset
-n = int(np.sqrt(x.shape[1]))
+m = x.shape[0] #there are 30.000 samples in the dataset, shape[0] gives you the number of rows in the array
+n = int(np.sqrt(x.shape[1])) #shape[1] gives you the length of the row
 
 ### Data split
 n_train = 28000 #number of training samples; first n_train samples in the data set are used for training
@@ -95,7 +95,7 @@ y_test = y[n_train:m,:,:]
 del x3d, y
 
 
-x = Input(shape=(None, None, 3))
+x = Input(shape=[100, 100, 3])))
 
 net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(x)
 net = BatchNormalization()(net)
