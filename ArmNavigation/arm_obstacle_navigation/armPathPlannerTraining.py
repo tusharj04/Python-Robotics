@@ -33,11 +33,9 @@ test_set_x = test_datagen.flow_from_directory(
         target_size=(100, 100), #also need to decide the images here
         batch_size=32,
         class_mode='binary') #need to determine the proper class mode
-        
+
 
 #Initializing the CNN
-
-
 x = Input(shape=[100, 100, 3])))
 
 net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(x)
