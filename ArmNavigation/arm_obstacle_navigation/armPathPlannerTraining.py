@@ -15,50 +15,60 @@ train_datagen = ImageDataGenerator(
         shear_range=0.2,
         zoom_range=0.2,
         horizontal_flip=True)
-training_set = train_datagen.flow_from_directory(
-        'arm_obstacle_navigation/training_set'
+training_set_x = train_datagen.flow_from_directory(
+        'arm_obstacle_navigation/training_set/training_set_x'
+        target_size=(100, 100), #need to decide whether we plan to use 100x100 data size for the images cuz its gonna take a long time to train then
+        batch_size=32,
+        class_mode='binary') #what type of class mode is it
+training_set_y = train_datagen.flow_from_directory(
+        'arm_obstacle_navigation/training_set/training_set_y'
         target_size=(100, 100), #need to decide whether we plan to use 100x100 data size for the images cuz its gonna take a long time to train then
         batch_size=32,
         class_mode='binary') #what type of class mode is it
 
 #Preprocessing the test set
 test_datagen = ImageDataGenerator(rescale=1./255)
-test_set = test_datagen.flow_from_directory(
+test_set_x = test_datagen.flow_from_directory(
         'arm_obstacle_navigation/test_set',
         target_size=(100, 100), #also need to decide the images here
         batch_size=32,
         class_mode='binary') #need to determine the proper class mode
+        
 
 #Initializing the CNN
-cnn = tf.keras.models.Sequential()
 
-#Convolution
-cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, activation='relu', input_shape[100, 100, 3])) #need to update this to te size of the images
 
-#Pooling
-cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, strides=2))
+x = Input(shape=[100, 100, 3])))
 
-#Second Convolutional Layer
-cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, activation='relu')) #need to update this to te size of the images
-cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, strides=2))
+net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(x)
+net = BatchNormalization()(net)
+for i in range(19):
+	net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(net)
+	net = BatchNormalization()(net)
 
-#Flattening
-cnn.add(tf.keras.layers.Flatten())
+net = Conv2D(filters=1, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='sigmoid')(net)
+net = BatchNormalization()(net)
+net = Dropout(0.10)(net)
 
-#Full Connection
-cnn.add(tf.keras.layer.Dense(units=128, activation='relu'))
-
-#Output Layer
-cnn.add(tf.keras.layer.Dense(units=1, activation='sigmoid')) #need to change units so that it is not binary classification
-
+model = Model(inputs=x,outputs=net)
+model.summary()
 
 early_stop = EarlyStopping(monitor='val_acc', min_delta=0, patience=10, verbose=1, mode='auto')
 save_weights = ModelCheckpoint(filepath='weights_2d.hf5', monitor='val_acc',verbose=1, save_best_only=True)
-#Training the cnn
-cnn.compile(optimizer='adam', loss = 'binary_crossentropy', metrcis = ['accuracy'])
 
-#Training the cnn on the training set and evaluating it on the test set
-cnn.fit(x = training_set, validation_data = test_set, epochs = )
+print('Train network ...')
+model.compile(optimizer='adam',loss='mse',metrics=['accuracy'])
+model.fit(x_train.reshape(n_train,n,n,3), y_train.reshape(n_train,n,n,1), batch_size=64, validation_split=1/14, epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
+
+print('Save trained model ...')
+model.load_weights('weights_2d.hf5')
+model.save("model_2d.hf5")
+
+print('Test network ...')
+model=load_model("model_2d.hf5")
+score = model.evaluate(x_test.reshape(n_test,n,n,3), y_test.reshape(n_test,n,n,1), verbose=1)
+print('test_acc:', score[1])
+
 
 
 
