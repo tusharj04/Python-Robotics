@@ -70,7 +70,10 @@ save_weights = ModelCheckpoint(filepath='weights_2d.hf5', monitor='val_acc',verb
 
 print('Train network ...')
 model.compile(optimizer='adam',loss='mse',metrics=['accuracy'])
-model.fit(training_set_x.reshape(10000, 100, 100, 3), training_set_y.reshape(10000,100,100,1), batch_size=64, validation_split=1/14, epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
+
+#model.fit(training_set_x.reshape(10000, 100, 100, 3), training_set_y.reshape(10000,100,100,1), batch_size=64, validation_split=1/14, epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
+#model.fit_generator(generator, epochs=int, steps_per_epoch=int, validation_data=tuple, validation_steps=int)
+model.fit(x = training_set_x, y = training_set_y, validation_split=1/14, epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
 #we are fitting to trainng set, 10000 sets a workspace + start grid + final grid (3 total) which are all 100 by 100 each
 print('Save trained model ...')
 model.load_weights('weights_2d.hf5')
