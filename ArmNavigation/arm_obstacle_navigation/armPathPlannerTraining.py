@@ -63,9 +63,69 @@ test_set_y = tf.keras.preprocessing.image_dataset_from_directory(
 #i am not sure if the images are already 100 by 100, but if they are, i think we do not even need most of the above stuff,
 
 
+img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace00000.png')
+print("Orignal:" ,type(img))
+
+# convert to numpy array
+FinalArmConfigImageArray = []
+for x in range (10000):
+    img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
+    FinalArmConfigImageArray.append(img_to_array(img))
+
+
+WorkSpaceImageArray = []
+for x in range (10000):
+    img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace{:05d}.png'.format(x))
+    WorkSpaceImageArray.append(img_to_array(img))
+print(WorkSpaceImageArray[9999])
+
+
+StartArmConfigImageArray = []
+for x in range (10000):
+    img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/startarmconfig/startarmconfig{:05d}.png'.format(x))
+    StartArmConfigImageArray.append(img_to_array(img))
+print(StartArmConfigImageArray[9999])
+
+routeGridImageArray = []
+for x in range (10000):
+    img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y/routegrid/route{:05d}.png'.format(x))
+    routeGridImageArray.append(img_to_array(img))
+print(routeGridImageArray[9999])
+
+trainingDataXArray = []
+trainingDataXArray.append(FinalArmConfigImageArray)
+trainingDataXArray.append(WorkSpaceImageArray)
+trainingDataXArray.append(StartArmConfigImageArray)
+
+FinalArmConfigImageArrayTest = []
+for x in range (1000):
+    img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetfinalarmconfig/finalarmconfig{:05d}.png'.format(x))
+    FinalArmConfigImageArrayTest.append(img_to_array(img))
+
+
+FinalWorkSpaceImageArrayTest = []
+for x in range (1000):
+    img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetworkspace/workspace{:05d}.png'.format(x))
+    FinalWorkSpaceImageArrayTest.append(img_to_array(img))
+
+
+StartArmConfigImageArrayTest = []
+for x in range (1000):
+    img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetstartarmconfig/startarmconfig{:05d}.png'.format(x))
+    StartArmConfigImageArrayTest.append(img_to_array(img))
+
+routeGridImageArrayTest = []
+for x in range (1000):
+    img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y/testsetroute/route{:05d}.png'.format(x))
+    routeGridImageArrayTest.append(img_to_array(img))
+
+testDataXArray = []
+testDataXArray.append(FinalArmConfigImageArrayTest)
+testDataXArray.append(WorkSpaceImageArrayTest)
+testDataXArray.append(StartArmConfigImageArrayTest)
 
 #Initializing the CNN
-x = Input(shape=[100, 100, 3])
+x = Input(shape=(None, None, 3))
 
 net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(x)
 net = BatchNormalization()(net)
@@ -92,7 +152,10 @@ model.compile(optimizer='adam',loss='mse',metrics=['accuracy'])
 
 #model.fit(training_set_x.reshape(10000, 100, 100, 3), training_set_y.reshape(10000,100,100,1), batch_size=64, validation_split=1/14, epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
 #model.fit_generator(generator, epochs=int, steps_per_epoch=int, validation_data=tuple, validation_steps=int)
-model.fit(training_set_x,validation_data=(test_set_x, test_set_y), epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
+model.fit(trainingDataXArray.reshape(10000,100,100,3),routeGridImageArray.reshape(10000, 100, 100, 1), validation_data=(testDataXArray, routeGridImageArrayTest), epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
+#model.fit(x_train.reshape(n_train,n,n,3), y_train.reshape(n_train,n,n,1), batch_size=64, validation_split=1/14, epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
+
+
 #we are fitting to trainng set, 10000 sets a workspace + start grid + final grid (3 total) which are all 100 by 100 each
 print('Save trained model ...')
 model.load_weights('weights_2d.hf5')
