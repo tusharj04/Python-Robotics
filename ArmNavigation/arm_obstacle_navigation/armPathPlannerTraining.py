@@ -21,16 +21,16 @@ train_datagen = ImageDataGenerator(
         horizontal_flip=True)
 training_set_x = tf.keras.preprocessing.image_dataset_from_directory(
     directory = #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
-    #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
-    'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\\ArmNavigation\\arm_obstacle_navigation\\training_set_x',
+    '/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
+    #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\\ArmNavigation\\arm_obstacle_navigation\\training_set_x',
     labels='inferred',
     label_mode='categorical',
     batch_size=32,
     image_size=(256, 256))
 training_set_y = tf.keras.preprocessing.image_dataset_from_directory(
     directory = #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
-    #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
-    'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\training_set_y',
+    '/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
+    #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\training_set_y',
     labels='inferred',
     label_mode='categorical',
     batch_size=32,
@@ -40,8 +40,8 @@ training_set_y = tf.keras.preprocessing.image_dataset_from_directory(
 test_datagen = ImageDataGenerator(rescale=1./255)
 test_set_x = tf.keras.preprocessing.image_dataset_from_directory(
     directory = #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
-    'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_x',
-    #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
+    #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_x',
+    '/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
     # 'arm_obstacle_navigation/test_set_x',
     labels='inferred',
     label_mode='categorical',
@@ -49,8 +49,8 @@ test_set_x = tf.keras.preprocessing.image_dataset_from_directory(
     image_size=(256, 256))
 test_set_y = tf.keras.preprocessing.image_dataset_from_directory(
     directory = #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
-    'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_y',
-    #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
+    #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_y',
+    '/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
     #'arm_obstacle_navigation/test_set_y',
     labels='inferred',
     label_mode='categorical',
