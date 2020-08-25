@@ -137,18 +137,7 @@ for x in range (10000):
     fullarray = (img_to_array(img))
     #print(fullarray)
     reshapedarray = fullarray.reshape(960,960)
-    stringarray = np.array2string(reshapedarray)
-    onebracketgone = stringarray.replace('[', ' ')
-    shortenedarray = onebracketgone.replace(']', '')
-    print(shortenedarray)
-    f= open("routeGridImageArray.dat \n", "w+")
-    f.write(shortenedarray)
-    f.close()
-#trainingDataXArray = []
-#trainingDataXArray.append(FinalArmConfigImageArray)
-#trainingDataXArray.append(WorkSpaceImageArray)
-#trainingDataXArray.append(StartArmConfigImageArray)
-#save('trainingDataXArray.dat', trainingDataXArray)
+    strtaXArray)
 
 #FinalArmConfigImageArrayTest = []
 for x in range (999):
