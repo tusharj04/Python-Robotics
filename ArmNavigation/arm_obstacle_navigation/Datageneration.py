@@ -19,54 +19,6 @@ np.set_printoptions(threshold=sys.maxsize)
 #Preprocessing the training set
 
 #i dont think we need all of the next 5 lines
-train_datagen = ImageDataGenerator(
-        rescale=1./255,
-        shear_range=0.2,
-        zoom_range=0.2,
-        horizontal_flip=True)
-training_set_x = tf.keras.preprocessing.image_dataset_from_directory(
-    directory = '/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
-    #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
-    #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
-    #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\\ArmNavigation\\arm_obstacle_navigation\\training_set_x',
-    labels='inferred',
-    label_mode='categorical',
-    batch_size=32,
-    image_size=(100, 100))
-training_set_y = tf.keras.preprocessing.image_dataset_from_directory(
-    directory ='/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
-    #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
-    #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
-    #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\training_set_y',
-    labels='inferred',
-    label_mode='categorical',
-    batch_size=32,
-    image_size=(100, 100))#what type of class mode is it
-
-#Preprocessing the test set
-test_datagen = ImageDataGenerator(rescale=1./255)
-test_set_x = tf.keras.preprocessing.image_dataset_from_directory(
-    directory ='/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
-    #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
-    #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_x',
-    #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
-    # 'arm_obstacle_navigation/test_set_x',
-    labels='inferred',
-    label_mode='categorical',
-    batch_size=32,
-    image_size=(100, 100))
-test_set_y = tf.keras.preprocessing.image_dataset_from_directory(
-    directory ='/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
-    #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
-    #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_y',
-    #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
-    #'arm_obstacle_navigation/test_set_y',
-    labels='inferred',
-    label_mode='categorical',
-    batch_size=32,
-    image_size=(100, 100))
-#i am not sure if the images are already 100 by 100, but if they are, i think we do not even need most of the above stuff,
-
 
 
 #img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace00000.png')
