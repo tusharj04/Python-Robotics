@@ -74,11 +74,13 @@ print('Saving images in array format...')
 
 
 # convert to numpy array
-FinalArmConfigImageArray = []
+#FinalArmConfigImageArray = []
+FinalArmConfigImageArray = np.array(FinalArmConfigImageArray, dtype=np.int8)
 for x in range (9999):
     #img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
     img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
     FinalArmConfigImageArray.append(img_to_array(img))
+    #FinalArmConfigImageArray = FinalArmConfigImageArray.astype(np.int32)
     print(x)
     #np.savetxt('FinalArmConfigImageArray.dat', FinalArmConfigImageArray)
     #fullarray = (img_to_array(img))
@@ -94,13 +96,13 @@ for x in range (9999):
 #np.savetxt('FinalArmConfigImageArray.dat', FinalArmConfigImageArray)
 
 
+
 WorkSpaceImageArray = []
 for x in range (9999):
     #img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace{:05d}.png'.format(x))
     img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace{:05d}.png'.format(x))
     WorkSpaceImageArray.append(img_to_array(img))
     print(x)
-
     #fullarray = (img_to_array(img))
     #print(fullarray)
     #reshapedarray = fullarray.reshape(100,100)
