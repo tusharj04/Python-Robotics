@@ -183,7 +183,7 @@ print('Saving images in array format...')
 #img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace00000.png')
 #print("Orignal:" ,type(img))
 
-x = np.zeros((3,))
+
 # convert to numpy array
 FinalArmConfigImageArray = SinglyLinkedList()
 for x in range (9999):
@@ -203,7 +203,7 @@ for x in range (9999):
     #FinalArmConfigImageArray.append(img_to_array(img))
 #f=open("FinalArmConfigImageArray", "a+")
 #np.savetxt('FinalArmConfigImageArray.dat', FinalArmConfigImageArray)
-holderArray = np.zeros(size)
+holderArray = []
 for c in range(FinalArmConfigImageArray.size):
     holderArray[c] = FinalArmConfigImageArray.dequeue()
 print(holderArray)
