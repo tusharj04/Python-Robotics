@@ -76,10 +76,10 @@ test_set_y = tf.keras.preprocessing.image_dataset_from_directory(
 print('Saving images in array format...')
 
 # convert to numpy array
-FinalArmConfigImageArray = np.zeros(9216000000)
-
-FinalArmConfigImageArray = np.array(FinalArmConfigImageArray)
+FinalArmConfigImageArray = np.array([])
 FinalArmConfigImageArray = np.array(FinalArmConfigImageArray, dtype=np.int8)
+FinalArmConfigImageArray = np.array(np.zeros(9216000000))
+
 FinalArmConfigImageArray = FinalArmConfigImageArray.reshape(10000,960,960)
 print('test1')
 for x in range (9999):
