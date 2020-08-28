@@ -17,7 +17,6 @@ import numpy as np
 np.set_printoptions(threshold=sys.maxsize)
 
 
-
 '''
 training_set_x = tf.keras.preprocessing.image_dataset_from_directory(
     directory = '/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
@@ -77,14 +76,23 @@ test_set_y = tf.keras.preprocessing.image_dataset_from_directory(
 print('Saving images in array format...')
 
 # convert to numpy array
-FinalArmConfigImageArray = np.array([])
+FinalArmConfigImageArray = np.zeros(9216000000)
+
+FinalArmConfigImageArray = np.array(FinalArmConfigImageArray)
 FinalArmConfigImageArray = np.array(FinalArmConfigImageArray, dtype=np.int8)
+FinalArmConfigImageArray = FinalArmConfigImageArray.reshape(10000,960,960)
+print('test1')
 for x in range (9999):
-    #img = load_img('/Users/palluri/GitHub/PythonRobot1ics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
-    img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
+    img = load_img('/Users/palluri/GitHub/PythonRobot1ics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
+    #img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
     appendplain = np.array(img_to_array(img))
+    print('test2')
     appendreshaped = appendplain.reshape(960,960)
-    FinalArmConfigImageArray = np.append(FinalArmConfigImageArray,appendreshaped)
+    print('test3')
+    #num = 960 *960 * x
+    #previous num = 960 *960 *(x-1)
+    FinalArmConfigImageArray[x,:,:]= appendreshaped
+    #FinalArmConfigImageArray = np.append(FinalArmConfigImageArray,appendreshaped)
     print(x)
     #print(x)
     #img2 = array_to_img(appendplain)
@@ -106,7 +114,7 @@ for x in range (9999):
 
 #np.savetxt('FinalArmConfigImageArray.dat', FinalArmConfigImageArray)
 
-
+'''
 WorkSpaceImageArray = np.array([])
 WorkSpaceImageArray = np.array(WorkSpaceImageArray, dtype=np.int8)
 for x in range (9999):
@@ -275,13 +283,15 @@ testDataXArray = np.append(FinalArmConfigImageArrayTest, FinalArmConfigImageArra
 testDataXArray = np.append(FinalWorkSpaceImageArrayTest, WorkSpaceImageArray)
 testDataXArray = np.append(StartArmConfigImageArrayTest, StartArmConfigImageArray)
 
-
+'''
 
 #startarmdata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/StartArmConfigImageArray.dat')
 #finalarmdata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/FinalArmConfigImageArray.dat')
 #workspacedata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/WorkSpaceImageArray.dat')
 #routedata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
-'''
+
+
+
 #Initializing the CNN
 #x = Input(shape=(None, None, 3))
 
@@ -322,4 +332,4 @@ testDataXArray = np.append(StartArmConfigImageArrayTest, StartArmConfigImageArra
 #print('Test network ...')
 #model=load_model("model_2d.hf5")
 #score = model.evaluate(testDataXArray.reshape(10000,100,100,3), routeGridImageArrayTest.reshape(10000,100,100,1), verbose=1)
-#print('test_acc:', score[1]) '''
+#print('test_acc:', score[1])
