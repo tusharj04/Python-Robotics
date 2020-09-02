@@ -11,17 +11,16 @@ from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.preprocessing.image import array_to_img
 import sys
-
+from PIL import Image
 
 import numpy as np
 np.set_printoptions(threshold=sys.maxsize)
 
 
-
-
+'''
 training_set_x = tf.keras.preprocessing.image_dataset_from_directory(
-    directory = #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
-    '/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
+    directory = '/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
+    #'/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
     #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\\ArmNavigation\\arm_obstacle_navigation\\training_set_x',
     #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x',
     #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\\ArmNavigation\\arm_obstacle_navigation\\training_set_x',
@@ -30,8 +29,8 @@ training_set_x = tf.keras.preprocessing.image_dataset_from_directory(
     batch_size=32,
     image_size=(100, 100))
 training_set_y = tf.keras.preprocessing.image_dataset_from_directory(
-    directory = #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
-    '/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
+    directory = '/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
+    #'/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
     #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\training_set_y',
     #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y',
     #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\training_set_y',
@@ -40,9 +39,9 @@ training_set_y = tf.keras.preprocessing.image_dataset_from_directory(
     batch_size=32,
     image_size=(100, 100))
 test_set_x = tf.keras.preprocessing.image_dataset_from_directory(
-    directory = #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
+    directory = '/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
     #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_x',
-    '/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
+    #'/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
     #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_x',
     #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x',
     # 'arm_obstacle_navigation/test_set_x',
@@ -51,9 +50,9 @@ test_set_x = tf.keras.preprocessing.image_dataset_from_directory(
     batch_size=32,
     image_size=(100, 100))
 test_set_y = tf.keras.preprocessing.image_dataset_from_directory(
-    directory = #'/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
+    directory = '/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
     #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_y',
-    '/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
+    #'/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
     #'C:\\Users\\nihal\\Documents\\GitHub\\PythonRobotics\ArmNavigation\\arm_obstacle_navigation\\test_set_y',
     #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y',
     #'arm_obstacle_navigation/test_set_y',
@@ -66,43 +65,66 @@ test_set_y = tf.keras.preprocessing.image_dataset_from_directory(
 #'/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace00000.png')
 #print("Orignal:",type(img))
 
-print('Saving images in array format...')
 
 #img = load_img('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace00000.png')
 #print("Orignal:" ,type(img))
 #testimg = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace{:05d}.png'.format(1))
 #print(img_to_array(testimg))
 
+'''
+
+print('Saving images in array format...')
+
 # convert to numpy array
 FinalArmConfigImageArray = np.array([])
-FinalArmConfigImageArray = np.array(FinalArmConfigImageArray, dtype=np.int16)
+FinalArmConfigImageArray = np.array(FinalArmConfigImageArray, dtype=np.int8)
+FinalArmConfigImageArray = np.array(np.zeros(9216000000))
+
+FinalArmConfigImageArray = FinalArmConfigImageArray.reshape(10000,960,960)
+print('test1')
 for x in range (9999):
-    img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
+    img = load_img('/Users/palluri/GitHub/PythonRobot1ics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
     #img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/finalarmconfig/finalarmconfig{:05d}.png'.format(x))
-    toappend = np.array(img_to_array(img))
-    FinalArmConfigImageArray = np.append(FinalArmConfigImageArray,toappend)
+    appendplain = np.array(img_to_array(img))
+    print('test2')
+    appendreshaped = appendplain.reshape(960,960)
+    print('test3')
+    #num = 960 *960 * x
+    #previous num = 960 *960 *(x-1)
+    FinalArmConfigImageArray[x,:,:]= appendreshaped
+    #FinalArmConfigImageArray = np.append(FinalArmConfigImageArray,appendreshaped)
+    print(x)
+    #print(x)
+    #img2 = array_to_img(appendplain)
+    #img2.show()
     #FinalArmConfigImageArray = FinalArmConfigImageArray.astype(np.int32)
     #np.savetxt('FinalArmConfigImageArray.dat', FinalArmConfigImageArray)
     #fullarray = (img_to_array(img))
     #print(fullarray)
     #reshapedarray = fullarray.reshape(100,100)
-#    stringarray = np.array2string(reshapedarray)
+#
     #onebracketgone = stringarray.replace('[', ' ')
     #shortenedarray = onebracketgone.replace(']', '')
     #print(shortenedarray)
-    #f.write(np.array2string(img_to_array(img)))
+    #reshapedarray1 = np.array2string(appendreshaped)
+    #f=open("FinalArmConfigImageArray.dat", "a+")
+    #f.write(reshapedarray1)
+    #f.close()
     #FinalArmConfigImageArray.append(img_to_array(img))
-#f=open("FinalArmConfigImageArray", "a+")
+
 #np.savetxt('FinalArmConfigImageArray.dat', FinalArmConfigImageArray)
 
-
-
-WorkSpaceImageArray = []
+'''
+WorkSpaceImageArray = np.array([])
+WorkSpaceImageArray = np.array(WorkSpaceImageArray, dtype=np.int8)
 for x in range (9999):
-    img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace{:05d}.png'.format(x))
-    #img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace{:05d}.png'.format(x))
-    WorkSpaceImageArray.append(img_to_array(img))
-    print(x)
+    #img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace{:05d}.png'.format(x))
+    img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/workspacegrid/workspace{:05d}.png'.format(x))
+    #WorkSpaceImageArray.append(img_to_array(img))
+    #print(x)
+    appendplain = np.array(img_to_array(img))
+    appendreshaped = appendplain.reshape(960,960)
+    WorkSpaceImageArray = np.append(WorkSpaceImageArray,appendreshaped)
     #fullarray = (img_to_array(img))
     #print(fullarray)
     #reshapedarray = fullarray.reshape(100,100)
@@ -114,14 +136,16 @@ for x in range (9999):
     #f.write(shortenedarray)
     #f.close()
 
-
-StartArmConfigImageArray = []
+StartArmConfigImageArray = np.array([])
+StartArmConfigImageArray = np.array(StartArmConfigImageArray, dtype=np.int8)
 for x in range (9999):
-    img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/startarmconfig/startarmconfig{:05d}.png'.format(x))
-    #('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/startarmconfig/startarmconfig{:05d}.png'.format(x))
+    #img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/startarmconfig/startarmconfig{:05d}.png'.format(x))
+    ('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/startarmconfig/startarmconfig{:05d}.png'.format(x))
 #('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_x/startarmconfig/startarmconfig{:05d}.png'.format(x))
-    StartArmConfigImageArray.append(img_to_array(img))
-
+    #StartArmConfigImageArray.append(img_to_array(img))
+    appendplain = np.array(img_to_array(img))
+    appendreshaped = appendplain.reshape(960,960)
+    StartArmConfigImageArray = np.append(StartArmConfigImageArray,appendreshaped)
     #fullarray = (img_to_array(img))
     #print(fullarray)
     #reshapedarray = fullarray.reshape(100,100)
@@ -133,13 +157,16 @@ for x in range (9999):
     #f.write(shortenedarray)
     #f.close()
 
-routeGridImageArray = []
+routeGridImageArray = np.array([])
+routeGridImageArray = np.array(routeGridImageArray, dtype=np.int8)
 for x in range (10000):
-    img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y/routegrid/route{:05d}.png'.format(x))
-    #img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y/routegrid/route{:05d}.png'.format(x))
+    #img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y/routegrid/route{:05d}.png'.format(x))
+    img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y/routegrid/route{:05d}.png'.format(x))
     #('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/training_set_y/routegrid/route{:05d}.png'.format(x))
-    routeGridImageArray.append(img_to_array(img))
-
+    #routeGridImageArray.append(img_to_array(img))
+    appendplain = np.array(img_to_array(img))
+    appendreshaped = appendplain.reshape(960,960)
+    routeGridImageArray = np.append(routeGridImageArray,appendreshaped)
     #fullarray = (img_to_array(img))
     #print(fullarray)
     #reshapedarray = fullarray.reshape(100,100)
@@ -156,17 +183,21 @@ for x in range (10000):
 #trainingDataXArray.append(StartArmConfigImageArray)
 #save('trainingDataXArray.dat', trainingDataXArray)
 
-trainingDataXArray = []
-trainingDataXArray.append(FinalArmConfigImageArray)
-trainingDataXArray.append(WorkSpaceImageArray)
-trainingDataXArray.append(StartArmConfigImageArray)
+trainingDataXArray = np.array([])
+trainingDataXArray = np.append(trainingDataXArray, FinalArmConfigImageArray)
+trainingDataXArray = np.append(trainingDataXArray, WorkSpaceImageArray)
+trainingDataXArray = np.append(trainingDataXArray, StartArmConfigImageArray)
 
-FinalArmConfigImageArrayTest = []
+FinalArmConfigImageArrayTest = np.array([])
+FinalArmConfigImageArrayTest = np.array(FinalArmConfigImageArrayTest, dtype=np.int8)
 for x in range (999):
-    img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetfinalarmconfig/finalarmconfig{:05d}.png'.format(x))
-    #img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetfinalarmconfig/finalarmconfig{:05d}.png'.format(x))
+    #img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetfinalarmconfig/finalarmconfig{:05d}.png'.format(x))
+    img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetfinalarmconfig/finalarmconfig{:05d}.png'.format(x))
     #('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetfinalarmconfig/finalarmconfig{:05d}.png'.format(x))
-    FinalArmConfigImageArrayTest.append(img_to_array(img))
+    #FinalArmConfigImageArrayTest.append(img_to_array(img))
+    appendplain = np.array(img_to_array(img))
+    appendreshaped = appendplain.reshape(960,960)
+    FinalArmConfigImageArrayTest = np.append(FinalArmConfigImageArrayTest,appendreshaped)
     #FinalArmConfigImageArrayTest.append(img_to_array(img))
     #fullarray = (img_to_array(img))
     #print(fullarray)
@@ -179,14 +210,17 @@ for x in range (999):
     #f.write(shortenedarray)
     #f.close()
 
-
-FinalWorkSpaceImageArrayTest = []
+FinalWorkSpaceImageArrayTest = np.array([])
+FinalWorkSpaceImageArrayTest = np.array(FinalWorkSpaceImageArrayTest, dtype=np.int8)
 for x in range (999):
-    img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetworkspace/workspace{:05d}.png'.format(x))
+    #img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetworkspace/workspace{:05d}.png'.format(x))
     #FinalWorkSpaceImageArrayTest.append(img_to_array(img)))
-    #img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetworkspace/workspace{:05d}.png'.format(x))
+    img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetworkspace/workspace{:05d}.png'.format(x))
     #('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetworkspace/workspace{:05d}.png'.format(x))
-    FinalWorkSpaceImageArrayTest.append(img_to_array(img))
+    #FinalWorkSpaceImageArrayTest.append(img_to_array(img)
+    appendplain = np.array(img_to_array(img))
+    appendreshaped = appendplain.reshape(960,960)
+    FinalWorkSpaceImageArrayTest = np.append(FinalWorkSpaceImageArrayTest,appendreshaped)
     #FinalWorkSpaceImageArrayTest.append(img_to_array(img))
     #fullarray = (img_to_array(img))
     #print(fullarray)
@@ -200,12 +234,16 @@ for x in range (999):
     #f.close()
 
 
-StartArmConfigImageArrayTest = []
+StartArmConfigImageArrayTest = np.array([])
+StartArmConfigImageArrayTest = np.array(StartArmConfigImageArrayTest, dtype=np.int8)
 for x in range (999):
-    img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetstartarmconfig/startarmconfig{:05d}.png'.format(x))
-    #img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetstartarmconfig/startarmconfig{:05d}.png'.format(x))
+    #img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetstartarmconfig/startarmconfig{:05d}.png'.format(x))
+    img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetstartarmconfig/startarmconfig{:05d}.png'.format(x))
     #('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_x/testsetstartarmconfig/startarmconfig{:05d}.png'.format(x))
-    StartArmConfigImageArrayTest.append(img_to_array(img))
+    #StartArmConfigImageArrayTest.append(img_to_array(img))
+    appendplain = np.array(img_to_array(img))
+    appendreshaped = appendplain.reshape(960,960)
+    StartArmConfigImageArrayTest = np.append(StartArmConfigImageArrayTest,appendreshaped)
     #StartArmConfigImageArrayTest.append(img_to_array(img))
     #fullarray = (img_to_array(img))
     #print(fullarray)
@@ -218,12 +256,16 @@ for x in range (999):
     #f.write(shortenedarray)
     #f.close()
 
-routeGridImageArrayTest = []
+routeGridImageArrayTest = np.array([])
+routeGridImageArrayTest = np.array(routeGridImageArrayTest, dtype=np.int8)
 for x in range (1000):
-    img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y/testsetroute/route{:05d}.png'.format(x))
-    #img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y/testsetroute/route{:05d}.png'.format(x))
+    #img = load_img('/Users/palluri/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y/testsetroute/route{:05d}.png'.format(x))
+    img = load_img('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y/testsetroute/route{:05d}.png'.format(x))
     #('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/test_set_y/testsetroute/route{:05d}.png'.format(x))
-    routeGridImageArrayTest.append(img_to_array(img))
+    #routeGridImageArrayTest.append(img_to_array(img))
+    appendplain = np.array(img_to_array(img))
+    appendreshaped = appendplain.reshape(960,960)
+    routeGridImageArrayTest = np.append(routeGridImageArrayTest,appendreshaped)
     #routeGridImageArrayTest.append(img_to_array(img))
     #fullarray = (img_to_array(img))
     #print(fullarray)
@@ -236,20 +278,20 @@ for x in range (1000):
     #f.write(shortenedarray)
     #f.close()
 
+testDataXArray = np.array([])
+testDataXArray = np.append(FinalArmConfigImageArrayTest, FinalArmConfigImageArray)
+testDataXArray = np.append(FinalWorkSpaceImageArrayTest, WorkSpaceImageArray)
+testDataXArray = np.append(StartArmConfigImageArrayTest, StartArmConfigImageArray)
 
-FinalArmConfigImageArray = []
-testDataXArray.append(FinalArmConfigImageArrayTest)
-testDataXArray.append(WorkSpaceImageArrayTest)
-testDataXArray.append(StartArmConfigImageArrayTest)
-
-
-
-
-startarmdata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/StartArmConfigImageArray.dat')
-finalarmdata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/FinalArmConfigImageArray.dat')
-workspacedata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/WorkSpaceImageArray.dat')
-routedata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
 '''
+
+#startarmdata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/StartArmConfigImageArray.dat')
+#finalarmdata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/FinalArmConfigImageArray.dat')
+#workspacedata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/WorkSpaceImageArray.dat')
+#routedata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
+
+
+
 #Initializing the CNN
 #x = Input(shape=(None, None, 3))
 
