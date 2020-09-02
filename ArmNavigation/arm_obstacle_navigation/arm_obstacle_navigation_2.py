@@ -12,6 +12,9 @@ import sys
 import random
 
 plt.ion()
+np.set_printoptions(threshold=sys.maxsize)
+np.set_printoptions(suppress=True)
+
 
 # Simulation parameters
 #M = 100
@@ -50,12 +53,12 @@ def main(number,obs):
             #if i is not self.n_links:
             #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
 
-    for x in range(10):
+    for x in range(2):
         plt.clf()
         grid = get_occupancy_grid(arm, obstacles)
-        plt.imshow(grid)
-        plt.savefig('testsetcspace/cspace{:05d}.png'.format(number))
-        plt.clf()
+        #plt.imshow(grid)
+        #plt.savefig('testsetcspace/cspace{:05d}.png'.format(number))
+        #plt.clf()
         global filenamenumber
         filenamenumber += 1
         print("FILE NAME NUMBER:{:05d}".format(filenamenumber))
@@ -68,18 +71,19 @@ def main(number,obs):
         goal = (goalx, goaly)
         s = (100,100)
         #startgrid
-        ##grid2 = []
+        #grid2 = []
         ##grid2.append([grid])
-        ##np.savetxt('cspace.dat', grid2)
+        np.savetxt('trainingsetcspacecspace{:04d}.dat'.format(number), grid, fmt='%1d')
+        grid = np.loadtxt('trainingsetcspacecspace{:04d}.dat'.format(number))
         route = astar_torus(grid, start, goal, filenamenumber)
-
         global routegrid
         routegrid = np.zeros(s)
         for i in range(1, len(route)):
             routegrid[route[i]] = 6
             plt.clf()
             plt.imshow(routegrid)
-            plt.savefig('testsetroute/route{:05d}.png'.format(filenamenumber))
+            np.savetxt('trainingsetrouteroute{:04d}.dat'.format(number), routegrid, fmt='%1d')
+            #plt.savefig('trainingsetroute/route{:05d}.png'.format(filenamenumber))
             plt.clf()
         for obstacle in obs:
             circle = plt.Circle(
@@ -90,7 +94,7 @@ def main(number,obs):
         plt.xlim([-limit, limit])
         plt.ylim([-limit, limit])
         plt.draw()
-        plt.savefig('testsetworkspace/workspace{:05d}.png'.format(filenamenumber))
+        plt.savefig('trainingsetworkspaceworkspace{:05d}.png'.format(filenamenumber))
         plt.show()
         plt.clf()
         plt.pause(1e-5)
@@ -279,9 +283,10 @@ def astar_torus(grid, start_node, goal_node, number):
         #s=(100,100)
         #blank = np.zeros(s)
         #plt.imshow(blank)
-        plt.plot()
-        plt.savefig('testsetroute/route{:05d}'.format(number))
-        plt.cla()
+        #plt.plot()
+        #plt.savefig('trainingsetroute/route{:05d}'.format(number))
+        #plt.cla()
+        np.savetxt('trainingsetrouteroute{:04d}.dat'.format(number), route, fmt='%1d')
         grid[start_node] = 6
         theta1 = 2 * pi * start_node[0] / M - pi
         theta2 = 2 * pi * start_node[1] / M - pi
@@ -384,7 +389,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('testsetfinalarmconfig/finalarmconfig{:05d}'.format(filenamenumber))
+        myplt.savefig('trainingsetfinalarmconfigfinalarmconfig{:05d}'.format(filenamenumber))
 
         myplt.show()
         myplt.clf()
@@ -404,7 +409,7 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('testsetstartarmconfig/startarmconfig{:05d}'.format(filenamenumber))
+        myplt.savefig('trainingsetstartarmconfigstartarmconfig{:05d}'.format(filenamenumber))
         myplt.show()
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
@@ -416,7 +421,7 @@ class NLinkArm(object):
 
 
 np.set_printoptions(threshold=sys.maxsize)
-for z in range(100):
+for z in range(2):
     # Simulation parameters
     M = 100
     obstacles = []
