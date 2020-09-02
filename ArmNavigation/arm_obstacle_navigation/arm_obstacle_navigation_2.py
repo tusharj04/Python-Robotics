@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import from_levels_and_colors
 import sys
 import random
+import math
 
 plt.ion()
 np.set_printoptions(threshold=sys.maxsize)
@@ -53,7 +54,7 @@ def main(number,obs):
             #if i is not self.n_links:
             #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
 
-    for x in range(2):
+    for x in range(1):
         plt.clf()
         grid = get_occupancy_grid(arm, obstacles)
         #plt.imshow(grid)
@@ -61,7 +62,7 @@ def main(number,obs):
         #plt.clf()
         global filenamenumber
         filenamenumber += 1
-        print("FILE NAME NUMBER:{:05d}".format(filenamenumber))
+        print("FILE NAME NUMBER:{:04d}".format(filenamenumber))
         # (x, y) co-ordinates in the joint space [cell]
         startx = int(random.random()*99)
         starty = int(random.random()*99)
@@ -69,7 +70,7 @@ def main(number,obs):
         goaly = int(random.random()*99)
         start = (startx,starty)
         goal = (goalx, goaly)
-        s = (100,100)
+        size = (100,100)
         #startgrid
         #grid2 = []
         ##grid2.append([grid])
@@ -77,24 +78,37 @@ def main(number,obs):
         grid = np.loadtxt('trainingsetcspacecspace{:04d}.dat'.format(number))
         route = astar_torus(grid, start, goal, filenamenumber)
         global routegrid
-        routegrid = np.zeros(s)
+        routegrid = np.zeros(size)
+        workspacegrid1 = np.zeros(size)
         for i in range(1, len(route)):
             routegrid[route[i]] = 6
             plt.clf()
             plt.imshow(routegrid)
-            np.savetxt('trainingsetrouteroute{:04d}.dat'.format(number), routegrid, fmt='%1d')
+            np.savetxt('trainingsetrouteroute{:04d}.dat'.format(filenamenumber), routegrid, fmt='%1d')
             #plt.savefig('trainingsetroute/route{:05d}.png'.format(filenamenumber))
             plt.clf()
         for obstacle in obs:
-            circle = plt.Circle(
-            (obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
+            circle = plt.Circle((obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
+            workspacegrid1[10 * math.trunc((obstacle[0]))][10 * math.trunc((obstacle[1]))] = 1
+            radius = math.trunc(round((0.5 * obstacle[2]), 0))
+            for x in range(radius):
+                workspacegrid1[10 * math.trunc((obstacle[0]+radius))][10 * math.trunc((obstacle[1]+radius))] = 1
+                workspacegrid1[10 * math.trunc((obstacle[0]-radius))][10 * math.trunc((obstacle[1]-radius))] = 1
+                workspacegrid1[10 * math.trunc((obstacle[0]-radius))][10 * math.trunc((obstacle[1]+radius))] = 1
+                workspacegrid1[10 * math.trunc((obstacle[0]+radius))][10 * math.trunc((obstacle[1]-radius))] = 1
             print("plotted")
             plt.gca().add_patch(circle)
         limit = sum(link_length)
         plt.xlim([-limit, limit])
         plt.ylim([-limit, limit])
         plt.draw()
-        plt.savefig('trainingsetworkspaceworkspace{:05d}.png'.format(filenamenumber))
+        plt.savefig('trainingsetworkspaceworkspace{:04d}.png'.format(filenamenumber))
+        #np.savetxt('trainingsetworkspaceworkspace{:04d}.dat'.format(filenamenumber), workspacegrid1, fmt='%1d')
+        plt.clf()
+        #plt.xlim([-limit, limit])
+        #plt.ylim([-limit, limit])
+        plt.imshow(workspacegrid1)
+        plt.savefig('trainingsetworkspaceworkspacefromarray{:04d}.png'.format(filenamenumber))
         plt.show()
         plt.clf()
         plt.pause(1e-5)
@@ -421,20 +435,27 @@ class NLinkArm(object):
 
 
 np.set_printoptions(threshold=sys.maxsize)
-for z in range(2):
+for z in range(1):
     # Simulation parameters
     M = 100
     obstacles = []
     randomTotal = int(random.random()*2 +1)
     #for x in range(randomTotal):, testing something must indent back pater
     random1 = random.uniform(-2, 2)
-    random2 =random.uniform(-2, 2)
+    random1 = round(random1, 1)
+    random2 = random.uniform(-2, 2)
+    random2 = round(random2, 1)
     random3 = random.uniform(.4,.7)
+    random3 = round(random3, 1)
     obstacles.append([random1, random2,random3])
     random1 = random.uniform(-2, 2)
-    random2 =random.uniform(-2, 2)
+    random1 = round(random1, 1)
+    random2 = random.uniform(-2, 2)
+    random2 = round(random2, 1)
     random3 = random.uniform(.4,.7)
+    random3 = round(random3, 1)
     obstacles.append([random1, random2,random3])
+    print(obstacles)
     link_length = [0.5, 1.5]
     initial_link_angle = [0, 0]
     arm = NLinkArm(link_length, initial_link_angle, plt)
