@@ -53,7 +53,7 @@ class SinglyLinkedList:
         Takes O(1) time.
         """
         self.head = ListNode(data=data, next=self.head)
-        self.size = self.size + 1
+        self.size++
 
     def append(self, data):
         """
@@ -67,7 +67,7 @@ class SinglyLinkedList:
         while curr.next:
             curr = curr.next
         curr.next = ListNode(data=data)
-        self.size = self.size + 1
+        self.size++
 
     def find(self, key):
         """
@@ -98,7 +98,7 @@ class SinglyLinkedList:
         elif curr:
             prev.next = curr.next
             curr.next = None
-        self.size = self.size - 1
+        self.size--
     def dequeue(self):
         """
         Dequeues first element in list
@@ -108,7 +108,7 @@ class SinglyLinkedList:
         curr = self.head
         self.head = curr.next
         prev = None
-        self.size = self.size - 1
+        self.size--
         return curr.data
 
     def reverse(self):
@@ -203,7 +203,7 @@ for x in range (9999):
     #FinalArmConfigImageArray.append(img_to_array(img))
 #f=open("FinalArmConfigImageArray", "a+")
 #np.savetxt('FinalArmConfigImageArray.dat', FinalArmConfigImageArray)
-holderArray = np.zeros(FinalArmConfigImageArray.size)
+holderArray = []
 for c in range(FinalArmConfigImageArray.size):
     holderArray[c] = FinalArmConfigImageArray.dequeue()
 print(holderArray)
