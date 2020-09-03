@@ -74,6 +74,8 @@ def main(number,obs):
         #startgrid
         #grid2 = []
         ##grid2.append([grid])
+        #print('test')
+        #print(len(grid))
         np.savetxt('trainingsetcspacecspace{:04d}.dat'.format(number), grid, fmt='%1d')
         grid = np.loadtxt('trainingsetcspacecspace{:04d}.dat'.format(number))
         route = astar_torus(grid, start, goal, filenamenumber)
@@ -81,12 +83,12 @@ def main(number,obs):
         routegrid = np.zeros(size)
         workspacegrid1 = np.zeros(size)
         for i in range(1, len(route)):
-            routegrid[route[i]] = 6
+            routegrid[route[i]] = 1
             plt.clf()
             plt.imshow(routegrid)
-            np.savetxt('trainingsetrouteroute{:04d}.dat'.format(filenamenumber), routegrid, fmt='%1d')
-            #plt.savefig('trainingsetroute/route{:05d}.png'.format(filenamenumber))
             plt.clf()
+            #plt.savefig('trainingsetroute/route{:05d}.png'.format(filenamenumber))
+        np.savetxt('trainingsetrouteroute{:04d}.dat'.format(filenamenumber), routegrid, fmt='%1d')
         for obstacle in obs:
             circle = plt.Circle((obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
             workspacegrid1[10 * math.trunc((obstacle[0]))][10 * math.trunc((obstacle[1]))] = 1
@@ -107,6 +109,7 @@ def main(number,obs):
         plt.clf()
         #plt.xlim([-limit, limit])
         #plt.ylim([-limit, limit])
+        startarmconfigarray = np.zeros(100,100)
         plt.imshow(workspacegrid1)
         plt.savefig('trainingsetworkspaceworkspacefromarray{:04d}.png'.format(filenamenumber))
         plt.show()
@@ -114,11 +117,15 @@ def main(number,obs):
         plt.pause(1e-5)
         #first/start arm conifg
         for i, node in enumerate(route):
+            #startarray = np.array(np.zeros(100,100))
             if i == 0:
                 plt.cla()
-                grid[node] = 6
+                grid[node] = 1
                 theta1 = 2 * pi * node[0] / M - pi
                 theta2 = 2 * pi * node[1] / M - pi
+                #print('yessr')
+                #print(theta1)
+                #print(theta2)
                 arm.plot_arm2(plt, obstacles, number, [theta1, theta2])
             if i == len(route) - 1:
                 plt.cla()
@@ -391,6 +398,8 @@ class NLinkArm(object):
                 self.link_lengths[i - 1] * \
                 np.sin(np.sum(self.joint_angles[:i]))
         self.end_effector = np.array(self.points[self.n_links]).T
+        #print('dubs')
+        #print(self.end_effector)
 
     def plot_arm(self, myplt, obstacles, number, joint_angles):  # pragma: no cover
         self.update_joints(joint_angles)
@@ -420,6 +429,7 @@ class NLinkArm(object):
                 #myplt.plot([self.points[i][0], self.points[i + 1][0]],
                         #  [self.points[i][1], self.points[i + 1][1]], 'r-')
         myplt.plot(self.points[i][0], self.points[i][1], 'k.')
+        print(self.points[i][0])
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
@@ -455,15 +465,15 @@ for z in range(1):
     random3 = random.uniform(.4,.7)
     random3 = round(random3, 1)
     obstacles.append([random1, random2,random3])
-    print(obstacles)
+    #print(obstacles)
     link_length = [0.5, 1.5]
     initial_link_angle = [0, 0]
     arm = NLinkArm(link_length, initial_link_angle, plt)
     grid = get_occupancy_grid(arm, obstacles)
     #f=open("cspace.dat", "a+")
     s = np.array_str(grid)
-    if __name__ == '__main__':
-        main(z,obstacles)
+    #if __name__ == '__main__':
+    main(z,obstacles)
     #f.write("test \n")
     #if routestatus == 0:
     #    plt.show()
