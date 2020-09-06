@@ -75,6 +75,8 @@ test_set_y = tf.keras.preprocessing.image_dataset_from_directory(
 
 print('Saving images in array format...')
 
+Z = 100
+
 # convert to numpy array
 FinalArmConfigImageArray = np.array([])
 FinalArmConfigImageArray = np.array(FinalArmConfigImageArray, dtype=np.int8)
@@ -291,43 +293,84 @@ testDataXArray = np.append(StartArmConfigImageArrayTest, StartArmConfigImageArra
 #routedata = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
 
 
+#start new code
 
-#Initializing the CNN
-#x = Input(shape=(None, None, 3))
 
-#net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(x)
-#net = BatchNormalization()(net)
-#for i in range(19):
-	#net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(net)
-	#net = BatchNormalization()(net)
+sets = 64
+c = 9999/64
 
-#net = Conv2D(filters=1, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='sigmoid')(net)
-#net = BatchNormalization()(net)
-#net = Dropout(0.10)(net)
+
+Initializing the CNN
+x = Input(shape=(None, None, 3))
+
+net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(x)
+net = BatchNormalization()(net)
+for i in range(19):
+	net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(net)
+	net = BatchNormalization()(net)
+
+net = Conv2D(filters=1, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='sigmoid')(net)
+net = BatchNormalization()(net)
+net = Dropout(0.10)(net)
 
 #21 convolutional layers created, with  batch BatchNormalization
 
 
-#model = Model(inputs=x,outputs=net)
+model = Model(inputs=x,outputs=net)
 #creating a model based off the inputted shape and the outputted layers
-#model.summary()
+model.summary()
 
-#early_stop = EarlyStopping(monitor='val_acc', min_delta=0, patience=10, verbose=1, mode='auto')
-#save_weights = ModelCheckpoint(filepath='weights_2d.hf5', monitor='val_acc',verbose=1, save_best_only=True)
+early_stop = EarlyStopping(monitor='val_acc', min_delta=0, patience=10, verbose=1, mode='auto')
+save_weights = ModelCheckpoint(filepath='weights_2d.hf5', monitor='val_acc',verbose=1, save_best_only=True)
 
-#print('Train network ...')
-#model.compile(optimizer='adam',loss='mse',metrics=['accuracy'])
-
-#model.fit(training_set_x.reshape(10000, 100, 100, 3), training_set_y.reshape(10000,100,100,1), batch_size=64, validation_split=1/14, epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
+print('Train network ...')
+model.compile(optimizer='adam',loss='mse',metrics=['accuracy'])
+'''
+#model.fit(training_set_x.reshape(64, 100, 100, 3), training_set_y.reshape(10000,100,100,1), batch_size=64, validation_split=1/14, epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
 #model.fit_generator(generator, epochs=int, steps_per_epoch=int, validation_data=tuple, validation_steps=int)
 #model.fit(trainingDataXArray.reshape(10000,100,100,3),routeGridImageArray.reshape(10000, 100, 100, 1), validation_data=(testDataXArray, routeGridImageArrayTest), epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
 #model.fit(x_train.reshape(n_train,n,n,3), y_train.reshape(n_train,n,n,1), batch_size=64, validation_split=1/14, epochs=1000, verbose=1, callbacks=[early_stop, save_weights])
-
+'''
 
 #we are fitting to trainng set, 10000 sets a workspace + start grid + final grid (3 total) which are all 100 by 100 each
-#print('Save trained model ...')
-#model.load_weights('weights_2d.hf5')
-#model.save("model_2d.hf5")
+print('Save trained model ...')
+model.load_weights('weights_2d.hf5')
+model.save("model_2d.hf5")
+count = 0
+for x in range(0,c, sets):
+    startarmdatasum = np.array([])
+    startarmdatasum = np.array(FinalArmConfigImageArray, dtype=np.int8)
+    startarmdatasum = np.array(np.zeros(100*100*64))
+    startarmdatasum = startarmdatasum.reshape(64,100,100)
+    finalarmdatasum= np.array([])
+    finalarmdatasum = np.array(FinalArmConfigImageArray, dtype=np.int8)
+    finalarmdatasum = np.array(np.zeros(100*100*64))
+    finalarmdatasum  = finalarmdatasum.reshape(64,100,100)
+    workspacearmdatasum = np.array([])
+    workspacearmdatasum = np.array(FinalArmConfigImageArray, dtype=np.int8)
+    workspacearmdatasum = np.array(np.zeros(100*100*64))
+    workspacearmdatasum = workspacearmdatasum.reshape(64,100,100)
+    routedatasum = np.array([])
+    routedatasum = np.array(FinalArmConfigImageArray, dtype=np.int8)
+    routedatasum = np.array(np.zeros(100*100*64))
+    routedatasum = routedatasum.reshape(64,100,100)
+    for z in range(64):
+        startarmdatasum[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/StartArmConfigImageArray.dat')
+        finalarmdata[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/FinalArmConfigImageArray.dat')
+        workspacedata[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/WorkSpaceImageArray.dat')
+        routedata[]:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
+        count+=1
+    reconstructed_model  = load_model("model_2d.hf5")
+    training_data_x = np.array([])
+    training_data_x = np.array(training_data_x, dtype =np.int8)
+    training_data_x = np.array(np.zeros(64,100,100,3))
+    training_data_x [:,:,:,0] = startarmdatasum
+    training_data_x [:,:,:,1] = finalarmdatasum
+    training_data_x[:,:,:,2] = workspacearmdatasum
+    reconstructed_model.fit(training_data_x.reshape(64, 100, 100, 3), routedatasum.reshape(64,100,100), batch_size=32, validation_split=1/14, epochs=5, verbose=1, callbacks=[early_stop, save_weights])
+    reconstructed_model.save("model_2d.h45")
+
+
 
 #print('Test network ...')
 #model=load_model("model_2d.hf5")
