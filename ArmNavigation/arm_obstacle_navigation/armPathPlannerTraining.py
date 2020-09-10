@@ -77,6 +77,7 @@ print('Saving images in array format...')
 
 Z = 100
 
+'''
 # convert to numpy array
 FinalArmConfigImageArray = np.array([])
 FinalArmConfigImageArray = np.array(FinalArmConfigImageArray, dtype=np.int8)
@@ -115,7 +116,7 @@ for x in range (9999):
     #FinalArmConfigImageArray.append(img_to_array(img))
 
 #np.savetxt('FinalArmConfigImageArray.dat', FinalArmConfigImageArray)
-
+'''
 '''
 WorkSpaceImageArray = np.array([])
 WorkSpaceImageArray = np.array(WorkSpaceImageArray, dtype=np.int8)
@@ -297,10 +298,10 @@ testDataXArray = np.append(StartArmConfigImageArrayTest, StartArmConfigImageArra
 
 
 sets = 64
-c = 9999/64
+c = 9999
 
 
-Initializing the CNN
+#Initializing the CNN
 x = Input(shape=(None, None, 3))
 
 net = Conv2D(filters=64, kernel_size=[3, 3], strides=[1, 1], padding="same", kernel_initializer='orthogonal', activation='relu')(x)
@@ -314,7 +315,6 @@ net = BatchNormalization()(net)
 net = Dropout(0.10)(net)
 
 #21 convolutional layers created, with  batch BatchNormalization
-
 
 model = Model(inputs=x,outputs=net)
 #creating a model based off the inputted shape and the outputted layers
@@ -333,32 +333,36 @@ model.compile(optimizer='adam',loss='mse',metrics=['accuracy'])
 '''
 
 #we are fitting to trainng set, 10000 sets a workspace + start grid + final grid (3 total) which are all 100 by 100 each
-print('Save trained model ...')
-model.load_weights('weights_2d.hf5')
-model.save("model_2d.hf5")
+#print('Save trained model ...')
+#model.load_weights('weights_2d.hf5')
+#model.save("model_2d.hf5")
 count = 0
 for x in range(0,c, sets):
     startarmdatasum = np.array([])
-    startarmdatasum = np.array(FinalArmConfigImageArray, dtype=np.int8)
+    startarmdatasum = np.array(startarmdatasum, dtype=np.int8)
     startarmdatasum = np.array(np.zeros(100*100*64))
     startarmdatasum = startarmdatasum.reshape(64,100,100)
     finalarmdatasum= np.array([])
-    finalarmdatasum = np.array(FinalArmConfigImageArray, dtype=np.int8)
+    finalarmdatasum = np.array(finalarmdatasum, dtype=np.int8)
     finalarmdatasum = np.array(np.zeros(100*100*64))
     finalarmdatasum  = finalarmdatasum.reshape(64,100,100)
     workspacearmdatasum = np.array([])
-    workspacearmdatasum = np.array(FinalArmConfigImageArray, dtype=np.int8)
+    workspacearmdatasum = np.array(workspacearmdatasum, dtype=np.int8)
     workspacearmdatasum = np.array(np.zeros(100*100*64))
     workspacearmdatasum = workspacearmdatasum.reshape(64,100,100)
     routedatasum = np.array([])
-    routedatasum = np.array(FinalArmConfigImageArray, dtype=np.int8)
+    routedatasum = np.array(routedatasum, dtype=np.int8)
     routedatasum = np.array(np.zeros(100*100*64))
     routedatasum = routedatasum.reshape(64,100,100)
     for z in range(64):
         startarmdatasum[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/StartArmConfigImageArray.dat')
         finalarmdata[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/FinalArmConfigImageArray.dat')
         workspacedata[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/WorkSpaceImageArray.dat')
-        routedata[]:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
+        routedata[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
+        #startarmdatasum[:,:,z] = np.loadtxt('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/StartArmConfigImageArray.dat')
+        #finalarmdata[:,:,z] = np.loadtxt('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/FinalArmConfigImageArray.dat')
+        #workspacedata[:,:,z] = np.loadtxt('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/WorkSpaceImageArray.dat')
+        #routedata[:,:,z] = np.loadtxt('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
         count+=1
     reconstructed_model  = load_model("model_2d.hf5")
     training_data_x = np.array([])
