@@ -366,7 +366,7 @@ for x in range(0,c, sets):
         count+=1
     reconstructed_model  = load_model("model_2d.hf5")
     training_data_x = np.array([])
-    training_data_x = np.array(training_data_x, dtype =np.int8)
+    training_data_x = np.array(training_data_x, dtype = np.int8)
     training_data_x = np.array(np.zeros(64,100,100,3))
     training_data_x [:,:,:,0] = startarmdatasum
     training_data_x [:,:,:,1] = finalarmdatasum
