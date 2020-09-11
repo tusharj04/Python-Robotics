@@ -337,23 +337,46 @@ model.compile(optimizer='adam',loss='mse',metrics=['accuracy'])
 #model.load_weights('weights_2d.hf5')
 #model.save("model_2d.hf5")
 count = 0
+
+startarmdatasum = np.array([])
+startarmdatasum = np.array(startarmdatasum, dtype=np.int8)
+startarmdatasum = np.array(np.zeros(100*100*64))
+startarmdatasum = startarmdatasum.reshape(64,100,100)
+finalarmdatasum= np.array([])
+finalarmdatasum = np.array(finalarmdatasum, dtype=np.int8)
+finalarmdatasum = np.array(np.zeros(100*100*64))
+finalarmdatasum  = finalarmdatasum.reshape(64,100,100)
+workspacearmdatasum = np.array([])
+workspacearmdatasum = np.array(workspacearmdatasum, dtype=np.int8)
+workspacearmdatasum = np.array(np.zeros(100*100*64))
+workspacearmdatasum = workspacearmdatasum.reshape(64,100,100)
+routedatasum = np.array([])
+routedatasum = np.array(routedatasum, dtype=np.int8)
+routedatasum = np.array(np.zeros(100*100*64))
+routedatasum = routedatasum.reshape(64,100,100)
+
+for z in range(64):
+    startarmdatasum[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/StartArmConfigImageArray.dat')
+    finalarmdata[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/FinalArmConfigImageArray.dat')
+    workspacedata[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/WorkSpaceImageArray.dat')
+    routedata[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
+    #startarmdatasum[:,:,z] = np.loadtxt('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/StartArmConfigImageArray.dat')
+    #finalarmdata[:,:,z] = np.loadtxt('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/FinalArmConfigImageArray.dat')
+    #workspacedata[:,:,z] = np.loadtxt('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/WorkSpaceImageArray.dat')
+    #routedata[:,:,z] = np.loadtxt('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
+
+training_data_x = np.array([])
+training_data_x = np.array(training_data_x, dtype = np.int8)
+training_data_x = np.array(np.zeros(64,100,100,3))
+training_data_x[:,:,:,0] = startarmdatasum
+training_data_x[:,:,:,1] = finalarmdatasum
+training_data_x[:,:,:,2] = workspacearmdatasum
+
+reconstructed_model.fit(training_data_x.reshape(64, 100, 100, 3), routedatasum.reshape(64,100,100), batch_size=32, validation_split=1/14, epochs=5, verbose=1, callbacks=[early_stop, save_weights])
+reconstructed_model.save("model_2d.h45")
+
+
 for x in range(0,c, sets):
-    startarmdatasum = np.array([])
-    startarmdatasum = np.array(startarmdatasum, dtype=np.int8)
-    startarmdatasum = np.array(np.zeros(100*100*64))
-    startarmdatasum = startarmdatasum.reshape(64,100,100)
-    finalarmdatasum= np.array([])
-    finalarmdatasum = np.array(finalarmdatasum, dtype=np.int8)
-    finalarmdatasum = np.array(np.zeros(100*100*64))
-    finalarmdatasum  = finalarmdatasum.reshape(64,100,100)
-    workspacearmdatasum = np.array([])
-    workspacearmdatasum = np.array(workspacearmdatasum, dtype=np.int8)
-    workspacearmdatasum = np.array(np.zeros(100*100*64))
-    workspacearmdatasum = workspacearmdatasum.reshape(64,100,100)
-    routedatasum = np.array([])
-    routedatasum = np.array(routedatasum, dtype=np.int8)
-    routedatasum = np.array(np.zeros(100*100*64))
-    routedatasum = routedatasum.reshape(64,100,100)
     for z in range(64):
         startarmdatasum[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/StartArmConfigImageArray.dat')
         finalarmdata[:,:,z] = np.loadtxt('/Users/palluri/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/FinalArmConfigImageArray.dat')
@@ -365,11 +388,11 @@ for x in range(0,c, sets):
         #routedata[:,:,z] = np.loadtxt('/Users/prana/Documents/GitHub/PythonRobotics/ArmNavigation/arm_obstacle_navigation/routeGridImageArray.dat')
         count+=1
     reconstructed_model  = load_model("model_2d.hf5")
-    training_data_x = np.array([])
-    training_data_x = np.array(training_data_x, dtype = np.int8)
-    training_data_x = np.array(np.zeros(64,100,100,3))
-    training_data_x [:,:,:,0] = startarmdatasum
-    training_data_x [:,:,:,1] = finalarmdatasum
+    #training_data_x = np.array([])
+    #training_data_x = np.array(training_data_x, dtype = np.int8)
+    #training_data_x = np.array(np.zeros(64,100,100,3))
+    training_data_x[:,:,:,0] = startarmdatasum
+    training_data_x[:,:,:,1] = finalarmdatasum
     training_data_x[:,:,:,2] = workspacearmdatasum
     reconstructed_model.fit(training_data_x.reshape(64, 100, 100, 3), routedatasum.reshape(64,100,100), batch_size=32, validation_split=1/14, epochs=5, verbose=1, callbacks=[early_stop, save_weights])
     reconstructed_model.save("model_2d.h45")
