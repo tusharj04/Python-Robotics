@@ -1,6 +1,5 @@
 """
 Obstacle navigation using A* on a toroidal grid
-
 Author: Daniel Ingram (daniel-s-ingram)
         Tullio Facchinetti (tullio.facchinetti@unipv.it)
 """
@@ -10,12 +9,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import from_levels_and_colors
 import sys
 import random
-import math
 
 plt.ion()
-np.set_printoptions(threshold=sys.maxsize)
-np.set_printoptions(suppress=True)
-
 
 # Simulation parameters
 #M = 100
@@ -54,15 +49,18 @@ def main(number,obs):
             #if i is not self.n_links:
             #myplt.plot(self.points[i][0], self.points[i][1], 'k.')
 
-    for x in range(1):
+    for x in range(10):
         plt.clf()
         grid = get_occupancy_grid(arm, obstacles)
-        #plt.imshow(grid)
-        #plt.savefig('testsetcspace/cspace{:05d}.png'.format(number))
-        #plt.clf()
+        plt.imshow(grid)
+        np.savetxt('Training/x/cspace/cspace{:04d}.dat'.format(number), grid, fmt='%1d')
+        grid = np.loadtxt('Training/x/cspace/cspace{:04d}.dat'.format(number))
+        np.savetxt('Training/x/cspace/cspace{:04d}.dat'.format(number), grid, fmt='%1d')
+        plt.savefig('Training/images/cspace/cspace{:04d}.dat05d}.png'.format(number))
+        plt.clf()
         global filenamenumber
         filenamenumber += 1
-        print("FILE NAME NUMBER:{:04d}".format(filenamenumber))
+        print("FILE NAME NUMBER:{:05d}".format(filenamenumber))
         # (x, y) co-ordinates in the joint space [cell]
         startx = int(random.random()*99)
         starty = int(random.random()*99)
@@ -70,62 +68,45 @@ def main(number,obs):
         goaly = int(random.random()*99)
         start = (startx,starty)
         goal = (goalx, goaly)
-        size = (100,100)
+        s = (100,100)
         #startgrid
-        #grid2 = []
+        ##grid2 = []
         ##grid2.append([grid])
-        #print('test')
-        #print(len(grid))
-        np.savetxt('trainingsetcspacecspace{:04d}.dat'.format(number), grid, fmt='%1d')
-        grid = np.loadtxt('trainingsetcspacecspace{:04d}.dat'.format(number))
+        ##np.savetxt('cspace.dat', grid2)
         route = astar_torus(grid, start, goal, filenamenumber)
+
         global routegrid
-        routegrid = np.zeros(size)
-        workspacegrid1 = np.zeros(size)
+        routegrid = np.zeros(s)
         for i in range(1, len(route)):
-            routegrid[route[i]] = 1
+            routegrid[route[i]] = 6
             plt.clf()
             plt.imshow(routegrid)
+            np.savetxt('Training/y/route{:04d}.dat'.format(number), routegrid, fmt='%1d')
+            plt.savefig('Training/images/route/route{:04d}.dat05d}.png'.format(filenamenumber))
             plt.clf()
-            #plt.savefig('trainingsetroute/route{:05d}.png'.format(filenamenumber))
-        np.savetxt('trainingsetrouteroute{:04d}.dat'.format(filenamenumber), routegrid, fmt='%1d')
         for obstacle in obs:
-            circle = plt.Circle((obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
-            workspacegrid1[10 * math.trunc((obstacle[0]))][10 * math.trunc((obstacle[1]))] = 1
-            radius = math.trunc(round((0.5 * obstacle[2]), 0))
-            for x in range(radius):
-                workspacegrid1[10 * math.trunc((obstacle[0]+radius))][10 * math.trunc((obstacle[1]+radius))] = 1
-                workspacegrid1[10 * math.trunc((obstacle[0]-radius))][10 * math.trunc((obstacle[1]-radius))] = 1
-                workspacegrid1[10 * math.trunc((obstacle[0]-radius))][10 * math.trunc((obstacle[1]+radius))] = 1
-                workspacegrid1[10 * math.trunc((obstacle[0]+radius))][10 * math.trunc((obstacle[1]-radius))] = 1
+            circle = plt.Circle(
+            (obstacle[0], obstacle[1]), radius=0.5 * obstacle[2], fc='k')
             print("plotted")
             plt.gca().add_patch(circle)
         limit = sum(link_length)
         plt.xlim([-limit, limit])
         plt.ylim([-limit, limit])
         plt.draw()
-        plt.savefig('trainingsetworkspaceworkspace{:04d}.png'.format(filenamenumber))
-        #np.savetxt('trainingsetworkspaceworkspace{:04d}.dat'.format(filenamenumber), workspacegrid1, fmt='%1d')
-        plt.clf()
-        #plt.xlim([-limit, limit])
-        #plt.ylim([-limit, limit])
-        startarmconfigarray = np.zeros(100,100)
-        plt.imshow(workspacegrid1)
-        plt.savefig('trainingsetworkspaceworkspacefromarray{:04d}.png'.format(filenamenumber))
+        data = np.fromstring(plt.canvas.tostring_rgb(), dtype=np.uint8, sep='')
+        data = data.reshape(plt.canvas.get_width_height()[::-1] + (3,))
+        np.savetxt('Training/x/workspace/workspace{:04d}.dat'.format(number), data, fmt='%1d')
+        plt.savefig('Training/images/workspace/workspace{:05d}.png'.format(filenamenumber))
         plt.show()
         plt.clf()
         plt.pause(1e-5)
         #first/start arm conifg
         for i, node in enumerate(route):
-            #startarray = np.array(np.zeros(100,100))
             if i == 0:
                 plt.cla()
-                grid[node] = 1
+                grid[node] = 6
                 theta1 = 2 * pi * node[0] / M - pi
                 theta2 = 2 * pi * node[1] / M - pi
-                #print('yessr')
-                #print(theta1)
-                #print(theta2)
                 arm.plot_arm2(plt, obstacles, number, [theta1, theta2])
             if i == len(route) - 1:
                 plt.cla()
@@ -187,7 +168,6 @@ def detect_collision(line_seg, circle):
         line_seg: List of coordinates of line segment endpoints e.g. [[1, 1], [2, 2]]
         circle: List of circle coordinates and radius e.g. [0, 0, 0.5] is a circle centered
                 at the origin with radius 0.5
-
     Returns:
         True if the line segment is in contact with the circle
         False otherwise
@@ -217,12 +197,10 @@ def get_occupancy_grid(arm, obstacles):
     and determines whether a given coordinate in joint space
     would result in a collision between a robot arm and obstacles
     in its environment.
-
     Args:
         arm: An instance of NLinkArm
         obstacles: A list of obstacles, with each obstacle defined as a list
                    of xy coordinates and a radius.
-
     Returns:
         Occupancy grid in joint space
     """
@@ -246,15 +224,12 @@ def get_occupancy_grid(arm, obstacles):
 
 def astar_torus(grid, start_node, goal_node, number):
     """
-
     Finds a path between an initial and goal joint configuration using
     the A* Algorithm on a tororiadal grid.
-
     Args:
         grid: An occupancy grid (ndarray)
         start_node: Initial joint configuation (tuple)
         goal_node: Goal joint configuration (tuple)
-
     Returns:
         Obstacle-free route in joint space from start_node to goal_node
     """
@@ -304,10 +279,9 @@ def astar_torus(grid, start_node, goal_node, number):
         #s=(100,100)
         #blank = np.zeros(s)
         #plt.imshow(blank)
-        #plt.plot()
-        #plt.savefig('trainingsetroute/route{:05d}'.format(number))
-        #plt.cla()
-        np.savetxt('trainingsetrouteroute{:04d}.dat'.format(number), route, fmt='%1d')
+        plt.plot()
+        plt.savefig('Training/images/route/route{:05d}'.format(number))
+        plt.cla()
         grid[start_node] = 6
         theta1 = 2 * pi * start_node[0] / M - pi
         theta2 = 2 * pi * start_node[1] / M - pi
@@ -398,8 +372,6 @@ class NLinkArm(object):
                 self.link_lengths[i - 1] * \
                 np.sin(np.sum(self.joint_angles[:i]))
         self.end_effector = np.array(self.points[self.n_links]).T
-        #print('dubs')
-        #print(self.end_effector)
 
     def plot_arm(self, myplt, obstacles, number, joint_angles):  # pragma: no cover
         self.update_joints(joint_angles)
@@ -412,8 +384,10 @@ class NLinkArm(object):
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('trainingsetfinalarmconfigfinalarmconfig{:05d}'.format(filenamenumber))
-
+        myplt.savefig('images/goal/goal{:05d}'.format(filenamenumber))
+        data = np.fromstring(myplt.canvas.tostring_rgb(), dtype=np.uint8, sep='')
+        data = data.reshape(myplt.canvas.get_width_height()[::-1] + (3,))
+        np.savetxt('Training/x/goal/goal{:04d}.dat'.format(number), data, fmt='%1d')
         myplt.show()
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
@@ -429,11 +403,13 @@ class NLinkArm(object):
                 #myplt.plot([self.points[i][0], self.points[i + 1][0]],
                         #  [self.points[i][1], self.points[i + 1][1]], 'r-')
         myplt.plot(self.points[i][0], self.points[i][1], 'k.')
-        print(self.points[i][0])
         myplt.xlim([-self.lim, self.lim])
         myplt.ylim([-self.lim, self.lim])
         myplt.draw()
-        myplt.savefig('trainingsetstartarmconfigstartarmconfig{:05d}'.format(filenamenumber))
+        data = np.fromstring(myplt.canvas.tostring_rgb(), dtype=np.uint8, sep='')
+        data = data.reshape(myplt.canvas.get_width_height()[::-1] + (3,))
+        np.savetxt('Training/x/start/start{:04d}.dat'.format(number), data, fmt='%1d')
+        myplt.savefig('images/start/start{:05d}'.format(filenamenumber))
         myplt.show()
         myplt.clf()
         myplt.xlim([-self.lim, self.lim])
@@ -445,35 +421,28 @@ class NLinkArm(object):
 
 
 np.set_printoptions(threshold=sys.maxsize)
-for z in range(1):
+for z in range(2):
     # Simulation parameters
     M = 100
     obstacles = []
     randomTotal = int(random.random()*2 +1)
     #for x in range(randomTotal):, testing something must indent back pater
     random1 = random.uniform(-2, 2)
-    random1 = round(random1, 1)
-    random2 = random.uniform(-2, 2)
-    random2 = round(random2, 1)
+    random2 =random.uniform(-2, 2)
     random3 = random.uniform(.4,.7)
-    random3 = round(random3, 1)
     obstacles.append([random1, random2,random3])
     random1 = random.uniform(-2, 2)
-    random1 = round(random1, 1)
-    random2 = random.uniform(-2, 2)
-    random2 = round(random2, 1)
+    random2 =random.uniform(-2, 2)
     random3 = random.uniform(.4,.7)
-    random3 = round(random3, 1)
     obstacles.append([random1, random2,random3])
-    #print(obstacles)
     link_length = [0.5, 1.5]
     initial_link_angle = [0, 0]
     arm = NLinkArm(link_length, initial_link_angle, plt)
     grid = get_occupancy_grid(arm, obstacles)
     #f=open("cspace.dat", "a+")
     s = np.array_str(grid)
-    #if __name__ == '__main__':
-    main(z,obstacles)
+    if __name__ == '__main__':
+        main(z,obstacles)
     #f.write("test \n")
     #if routestatus == 0:
     #    plt.show()
