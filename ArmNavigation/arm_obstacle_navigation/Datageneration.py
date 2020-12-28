@@ -54,7 +54,7 @@ class SinglyLinkedList:
         """
         self.head = ListNode(data=data, next=self.head)
         self.size++
-
+        
     def append(self, data):
         """
         Insert a new element at the end of the list.
